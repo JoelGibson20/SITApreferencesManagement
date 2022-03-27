@@ -37,10 +37,13 @@ class App extends Component {
     }
   };
 
-  runExample = async () => { //WHAT ACTUALLY IS THIS, A FUNCTION, A COMPONENT???
+  runExample = async () => { 
     //console.log(encryptPreferences("1234","test"));
     console.log(decryptPreferences(encryptPreferences("1234","test"), "test"));
-    /* const { accounts, contract } = this.state;
+    const { accounts, contract } = this.state;
+    /* await contract.methods.setPreferences(1,2,3,4,"test").send({from: accounts[0]});
+    console.log((await contract.methods.getPreferences(accounts[0],"test"))[0].toNumber()); */
+    /* 
 
     // Stores a given value, 5 by default.
     await contract.methods.set(5).send({ from: accounts[0] });

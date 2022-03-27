@@ -1,4 +1,4 @@
-import {AES,SHA3} from "crypto-js";
+import {AES,SHA3, enc} from "crypto-js";
 
 
 /* const CryptoJS = require("crypto-js")
@@ -15,7 +15,7 @@ export function encryptPreferences(pref, secretKey){
 }
 
 export function decryptPreferences(encPref, secretKey){
-    return AES.decrypt(encPref,secretKey);
+    return AES.decrypt(encPref,secretKey).toString(enc.Utf8);
 }
 
 

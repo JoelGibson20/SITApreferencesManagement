@@ -38,7 +38,8 @@ class App extends Component {
   };
 
   runExample = async () => { //WHAT ACTUALLY IS THIS, A FUNCTION, A COMPONENT???
-    console.log(encryptPreferences("test","test"));
+    //console.log(encryptPreferences("1234","test"));
+    console.log(decryptPreferences(encryptPreferences("1234","test"), "test"));
     /* const { accounts, contract } = this.state;
 
     // Stores a given value, 5 by default.

@@ -38,13 +38,14 @@ class App extends Component {
   };
 
   runExample = async () => { 
-    //console.log(encryptPreferences("1234","test"));
-    console.log(decryptPreferences(encryptPreferences("1234","test"), "test"));
+    console.log(decryptPreferences(encryptPreferences("1234","test"), "test")); // Tests encryption and decryption methods
     const { accounts, contract } = this.state;
-    /* await contract.methods.setPreferences(1,2,3,4,"test").send({from: accounts[0]});
-    console.log((await contract.methods.getPreferences(accounts[0],"test"))[0].toNumber()); */
-    /* 
 
+    await contract.methods.setPreferences("1234","test").send({from: accounts[0]}); // Set preferences "1234" under key "test"
+    const pref = await contract.methods.getPreferences(accounts[0],"test").call(); //Get stored preferences
+    console.log(pref); // Output stored preferences
+    
+/* 
     // Stores a given value, 5 by default.
     await contract.methods.set(5).send({ from: accounts[0] });
 
@@ -52,7 +53,7 @@ class App extends Component {
     const response = await contract.methods.get().call();
 
     // Update state with the result.
-    this.setState({ storageValue: response }); */
+    this.setState({ storageValue: response }); */ 
   };
 
   render() {

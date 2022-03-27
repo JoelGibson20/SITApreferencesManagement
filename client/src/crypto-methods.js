@@ -1,6 +1,5 @@
 import {AES,SHA3} from "crypto-js";
 
-function submit
 
 /* const CryptoJS = require("crypto-js")
 /* define(function (require, exports, module) {
@@ -11,9 +10,12 @@ function submit
     }
 });
  */
-/* function encryptPreferences(pref, secretKey){
-    return CryptoJS.AES.encrypt(pref,secretKey);
+export function encryptPreferences(pref, secretKey){
+    return AES.encrypt(pref,secretKey);
 }
 
-/* export default encryptPreferences = encryptPreferences; */
- 
+export function decryptPreferences(encPref, secretKey){
+    return AES.decrypt(encPref,secretKey);
+}
+
+

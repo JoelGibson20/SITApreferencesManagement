@@ -11,7 +11,7 @@ import {AES,SHA3, enc} from "crypto-js";
 });
  */
 export function encryptPreferences(pref, secretKey){
-    return AES.encrypt(pref,secretKey);
+    return AES.encrypt(pref,secretKey).ciphertext.toString();
 }
 
 export function decryptPreferences(encPref, secretKey){

@@ -41,9 +41,20 @@ class App extends Component {
     console.log(decryptPreferences(encryptPreferences("1234","test"), "test")); // Tests encryption and decryption methods
     const { accounts, contract } = this.state;
 
-    await contract.methods.setPreferences("1234","test").send({from: accounts[0]}); // Set preferences "1234" under key "test"
-    const pref = await contract.methods.getPreferences(accounts[0],"test").call(); //Get stored preferences
-    console.log(pref); // Output stored preferences
+    await contract.methods.setPreferences("1234","test").send({from: accounts[0]});
+    const pref1 = await contract.methods.getPreferences(accounts[0],"test").call()
+    console.log("pref1 = ", pref1) //Preferences successfully stored and retrieved
+    
+    // Can't store encrypted preferences as crypto-js.aes returns a CipherParams object that our contract can't store
+    const encPref = encryptPreferences("1234", "test2");
+    console.log("encPref = " + encPref);
+    // Calling setPreferences with encrypted string
+    await contract.methods.setPreferences(encPref,"test2").send({from: accounts[0]});  
+    const pref2 = await contract.methods.getPreferences(accounts[0],"test2").call(); 
+    console.log("pref2 = " ,pref2); 
+
+    const decPref2 = decryptPreferences(pref2, "test2");
+    console.log("decPref2 = " + decPref2);
     
 /* 
     // Stores a given value, 5 by default.

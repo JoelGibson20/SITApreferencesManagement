@@ -38,9 +38,10 @@ class App extends Component {
   };
 
   runExample = async () => { 
-    console.log(decryptPreferences(encryptPreferences("1234","test"), "test")); // Tests encryption and decryption methods
+    //console.log(decryptPreferences(encryptPreferences("1234","test"), "test")); // Tests encryption and decryption methods
     const { accounts, contract } = this.state;
-    genKey();
+    var key = genKey();
+    encryptPreferences("1222", key);
 
    /*  await contract.methods.setPreferences("1234","test").send({from: accounts[0]});
     const pref1 = await contract.methods.getPreferences(accounts[0],"test").call()

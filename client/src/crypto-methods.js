@@ -47,20 +47,22 @@ export function genKey(){
 
 export function encryptPreferences(pref, secretKey){
     var combined = Buffer.from(secretKey, 'hex').toString();
-    console.log("combined = ", combined);
-    var keyIV = combined.match(/.{1,32}/g); // Splits the combined key + iv into [key,iv]
-    console.log(keyIV[0]);
-    console.log(keyIV[1]);
-    var key = keyIV[0];
-    var iv = keyIV[1];
 
-    var cipher = forge.cipher.createCipher('AES-CBC', key);
-    cipher.start({iv: iv});
+    console.log("combined = ", combined);
+
+    // Splits the secret key back into key and IV
+    var key = combined.substring(0,32)
+    console.log("substring key = ", key);
+    var iv = combined.substring(32)
+    console.log("substring iv = ", iv);
+
+    var cipher = forge.cipher.createCipher('AES-CBC', forge.util.createBuffer(key)); // Forge uses its own buffer format so create buffer to avoid errors
+    cipher.start({iv: forge.util.createBuffer(iv)}); // Forge uses its own buffer format so create buffer to avoid errors
     cipher.update(forge.util.createBuffer(pref));
     cipher.finish();
     var encrypted = cipher.output;
     // outputs encrypted hex
-    console.log(encrypted);
+    console.log("encrypted = ", encrypted);
     console.log(encrypted.toHex());
 
     decryptPreferences(encrypted, secretKey);
@@ -70,13 +72,17 @@ export function encryptPreferences(pref, secretKey){
 
 export function decryptPreferences(encPref, secretKey){
     var combined = Buffer.from(secretKey, 'hex').toString();
-    var keyIV = combined.match(/.{1,32}/g); // Splits the combined key + iv into [key,iv]
-    var key = keyIV[0];
-    var iv = keyIV[1];
+    
+    // Splits the secret key back into key and IV
+    var key = combined.substring(0,32)
+    console.log("substring key = ", key);
+    var iv = combined.substring(32)
+    console.log("substring iv = ", iv);
 
 
-    var decipher = forge.cipher.createDecipher('AES-CBC', key);
-    decipher.start({iv: iv});
+
+    var decipher = forge.cipher.createDecipher('AES-CBC', forge.util.createBuffer(key)); // Forge uses its own buffer format so create buffer to avoid errors
+    decipher.start({iv: forge.util.createBuffer(iv)}); // Forge uses its own buffer format so create buffer to avoid errors
     decipher.update(encPref);
     var result = decipher.finish(); // check 'result' for true/false
     // outputs decrypted hex

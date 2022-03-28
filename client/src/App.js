@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import getWeb3 from "./getWeb3";
 import SITAPreferencesContract from "./contracts/SITApreferences2.json";
-import cryptoMethods, {encryptPreferences, decryptPreferences} from "./crypto-methods";
+import cryptoMethods, {encryptPreferences, decryptPreferences, genKey} from "./crypto-methods";
 
 import "./App.css";
 
@@ -40,8 +40,9 @@ class App extends Component {
   runExample = async () => { 
     console.log(decryptPreferences(encryptPreferences("1234","test"), "test")); // Tests encryption and decryption methods
     const { accounts, contract } = this.state;
+    genKey();
 
-    await contract.methods.setPreferences("1234","test").send({from: accounts[0]});
+   /*  await contract.methods.setPreferences("1234","test").send({from: accounts[0]});
     const pref1 = await contract.methods.getPreferences(accounts[0],"test").call()
     console.log("pref1 = ", pref1) //Preferences successfully stored and retrieved
     
@@ -54,7 +55,7 @@ class App extends Component {
     console.log("pref2 = " ,pref2); 
 
     const decPref2 = decryptPreferences(pref2, "test2");
-    console.log("decPref2 = " + decPref2);
+    console.log("decPref2 = " + decPref2); */
     
 /* 
     // Stores a given value, 5 by default.

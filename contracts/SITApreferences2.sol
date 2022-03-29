@@ -4,6 +4,11 @@ pragma solidity ^0.8.4;
 /// @param userAddress Address used.
 /// @param hashKey Hashed key used.
 error PreferencesNotFound(address userAddress, string hashKey);
+
+/// This address + H(key) combination was not found.
+/// @param userAddress Address used.
+/// @param hashKey Hashed key used.
+error KeyNotInUse(address userAddress, string hashKey);
  
 contract SITApreferences2{
     mapping(bytes => string) private userpreferences; // Mapping bytes (address + key) as you cant use struct or array as mapping keys
@@ -49,6 +54,28 @@ contract SITApreferences2{
       }
 
       return(keyExists);
+    }
+
+    function addApprovedAddress(address approvedAddress, string memory keyHash) public returns(bool success){
+      if(keyInUse(msg.sender,keyHash)){
+        bytes memory keyBytes = abi.encodePacked(keyHash);
+        approvedAddresses[abi.encodePacked(msg.sender, keyBytes)].push(approvedAddress);
+        return (true);
+      }
+      else{
+        return (false);
+      }
+
+    }
+
+    function getApprovedAddresses(string memory keyHash) public returns(address[] memory addresses){
+       if(keyInUse(msg.sender,keyHash)){
+        bytes memory keyBytes = abi.encodePacked(keyHash);
+        return(approvedAddresses[abi.encodePacked(msg.sender, keyBytes)]);
+       }
+       else{
+         revert KeyNotInUse(msg.sender, keyHash);
+       }
     }
 
 }

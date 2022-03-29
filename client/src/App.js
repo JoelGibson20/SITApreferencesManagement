@@ -42,8 +42,13 @@ class App extends Component {
     const { accounts, contract } = this.state;
 
     var key = aesGenKey();
-    var encryptedText = AESencrypt("1324", key);
-    console.log(AESdecrypt(encryptedText,key ));
+    var encPref = AESencrypt("1324", key);
+    console.log("encPref = ", encPref);
+
+    await contract.methods.setPreferences(encPref,key).send({from: accounts[0]});
+    var retrPref = await contract.methods.getPreferences(accounts[0],key).call()
+    console.log("retrPref = ", retrPref);
+    console.log(AESdecrypt(retrPref,key));
     //var key = genKey();
     //var encPref = encryptPreferences("1222", key)
     //console.log("encPref = ", encPref);

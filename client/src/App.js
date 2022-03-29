@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import getWeb3 from "./getWeb3";
 import SITAPreferencesContract from "./contracts/SITApreferences2.json";
-import cryptoMethods, {encryptPreferences, decryptPreferences, genKey, testAESjs} from "./crypto-methods";
+import cryptoMethods, {encryptPreferences, decryptPreferences, genKey, testAESjs, AESencrypt, aesGenKey, AESdecrypt} from "./crypto-methods";
 
 import "./App.css";
 
@@ -41,7 +41,9 @@ class App extends Component {
     //console.log(decryptPreferences(encryptPreferences("1234","test"), "test")); // Tests encryption and decryption methods
     const { accounts, contract } = this.state;
 
-    testAESjs();
+    var key = aesGenKey();
+    var encryptedText = AESencrypt("1324", key);
+    console.log(AESdecrypt(encryptedText,key ));
     //var key = genKey();
     //var encPref = encryptPreferences("1222", key)
     //console.log("encPref = ", encPref);

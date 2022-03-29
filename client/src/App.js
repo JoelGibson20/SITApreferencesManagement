@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import getWeb3 from "./getWeb3";
 import SITAPreferencesContract from "./contracts/SITApreferences2.json";
-import cryptoMethods, {encryptPreferences, decryptPreferences, genKey} from "./crypto-methods";
+import cryptoMethods, {encryptPreferences, decryptPreferences, genKey, hashKey} from "./crypto-methods";
 
 import "./App.css";
 
@@ -47,7 +47,7 @@ class App extends Component {
     await contract.methods.setPreferences(encPref,key).send({from: accounts[0]}); // Stores encrypted preferences (as hex string) in the contract
     var retrPref = await contract.methods.getPreferences(accounts[0],key).call() // Retrieves the encrypted preferences hex string from the contract
     console.log("retrPref = ", retrPref);
-    console.log(decryptPreferences(retrPref,key)); // Decrypts the preferences
+    console.log(decryptPreferences(retrPref,key)); // Decrypts the preferences 
     
     /*
     // Stores a given value, 5 by default.

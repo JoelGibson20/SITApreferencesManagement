@@ -1,5 +1,6 @@
-import aesjs from "aes-js";
+import aesjs from "aes-js"; // https://github.com/ricmoo/aes-js
 import crypto from 'crypto';
+import {sha3_512} from 'js-sha3'; // https://github.com/emn178/js-sha3
 
 //  Methods using AES follow example here: https://github.com/ricmoo/aes-js
 
@@ -31,6 +32,10 @@ export function decryptPreferences(encPref, secretKey){
 
     var decryptedText = aesjs.utils.utf8.fromBytes(decryptedBytes); // Converts decrypted bytes to UTF-8 text
     return(decryptedText);
+}
+
+export function hashKey(secretKey){
+    return(sha3_512(secretKey)); // Returns the SHA3-512 hash of the key as a string
 }
 
 

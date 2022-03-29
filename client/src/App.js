@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import getWeb3 from "./getWeb3";
 import SITAPreferencesContract from "./contracts/SITApreferences2.json";
-import cryptoMethods, {encryptPreferences, decryptPreferences, genKey} from "./crypto-methods";
+import cryptoMethods, {encryptPreferences, decryptPreferences, genKey, testAESjs} from "./crypto-methods";
 
 import "./App.css";
 
@@ -40,25 +40,28 @@ class App extends Component {
   runExample = async () => { 
     //console.log(decryptPreferences(encryptPreferences("1234","test"), "test")); // Tests encryption and decryption methods
     const { accounts, contract } = this.state;
-    var key = genKey();
-    encryptPreferences("1222", key);
 
-   /*  await contract.methods.setPreferences("1234","test").send({from: accounts[0]});
+    testAESjs();
+    //var key = genKey();
+    //var encPref = encryptPreferences("1222", key)
+    //console.log("encPref = ", encPref);
+    //await contract.methods.setPreferences(encPref,key).send({from: accounts[0]});
+    //const retrPref = await contract.methods.getPreferences(accounts[0],key).call()
+    //console.log("retr pref = ", retrPref);
+
+    //var decPref = decryptPreferences(retrPref,key);
+    //console.log("decPref = ", decPref);
+
+    
+    
+    
+    /* await contract.methods.setPreferences("1234","test").send({from: accounts[0]});
     const pref1 = await contract.methods.getPreferences(accounts[0],"test").call()
-    console.log("pref1 = ", pref1) //Preferences successfully stored and retrieved
+    console.log("pref1 = ", pref1) //Preferences successfully stored and retrieved */
     
-    // Can't store encrypted preferences as crypto-js.aes returns a CipherParams object that our contract can't store
-    const encPref = encryptPreferences("1234", "test2");
-    console.log("encPref = " + encPref);
-    // Calling setPreferences with encrypted string
-    await contract.methods.setPreferences(encPref,"test2").send({from: accounts[0]});  
-    const pref2 = await contract.methods.getPreferences(accounts[0],"test2").call(); 
-    console.log("pref2 = " ,pref2); 
 
-    const decPref2 = decryptPreferences(pref2, "test2");
-    console.log("decPref2 = " + decPref2); */
     
-/* 
+    /*
     // Stores a given value, 5 by default.
     await contract.methods.set(5).send({ from: accounts[0] });
 

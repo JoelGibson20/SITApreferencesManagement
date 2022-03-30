@@ -34,6 +34,7 @@ contract SITApreferences2{
 
       if (keyInUse(msg.sender,key) == false){ // If the key isn't already in use it needs to be added to the array in the usedKey mapping
         usedKeys[msg.sender].push(key);
+        addApprovedAddress(msg.sender, key); // Adds the user's address to approved addresses the first time a key is used.
       }
 
       bytes memory keyBytes = abi.encodePacked(key); // Convert string parameter for the secret key to bytes
@@ -88,7 +89,7 @@ contract SITApreferences2{
     }
 
     function removeApprovedAddress(address removeAddress, string memory keyHash) public returns (bool success){ // This should probably be converted to a helper function to prevent duplicate values, assuming hash-sets don't exist in Solidity
-      if(keyInUse(msg.sender,keyHash)){
+      if(keyInUse(msg.sender,keyHash)){ // Don't waste computing power (and thus Ethereum) looping through if the key isn't being used
         bytes memory keyBytes = abi.encodePacked(keyHash);
         address[] memory approvedAddressList = approvedAddresses[abi.encodePacked(msg.sender, keyBytes)]; // Gets the list to reduce the complexity of the for loop
         for(uint i; i < approvedAddressList.length; i++){  // Iterates through the users approved addresses

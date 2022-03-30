@@ -45,13 +45,17 @@ contract SITApreferences2{
     function getPreferences(address userAddress,string memory key) public returns(string memory preferences){
       bytes memory keyBytes = abi.encodePacked(key); // Convert string parameter for the secret key to bytes
 
-      if(keyInUse(userAddress, key)){
-        return(userpreferences[abi.encodePacked(userAddress, keyBytes)]);
+      if(approvedAddressExists(userAddress, key, msg.sender)){
+        if(keyInUse(userAddress, key)){
+          return(userpreferences[abi.encodePacked(userAddress, keyBytes)]);
+        }
+        else{
+          revert PreferencesNotFound(userAddress, key);
+        }
       }
       else{
-        revert PreferencesNotFound(userAddress, key);
+        revert ApprovedAddressNotFound(msg.sender,userAddress,key);
       }
-
     }
 
     function keyInUse(address userAddress, string memory keyHash) private returns(bool keyExists){ // Helper function to check if a key already exists in keysUsed
@@ -88,7 +92,7 @@ contract SITApreferences2{
        }
     }
 
-    function removeApprovedAddress(address removeAddress, string memory keyHash) public returns (bool success){ // This should probably be converted to a helper function to prevent duplicate values, assuming hash-sets don't exist in Solidity
+    function removeApprovedAddress(address removeAddress, string memory keyHash) public returns (bool success){ 
       if(keyInUse(msg.sender,keyHash)){ // Don't waste computing power (and thus Ethereum) looping through if the key isn't being used
         bytes memory keyBytes = abi.encodePacked(keyHash);
         address[] memory approvedAddressList = approvedAddresses[abi.encodePacked(msg.sender, keyBytes)]; // Gets the list to reduce the complexity of the for loop
@@ -102,9 +106,26 @@ contract SITApreferences2{
         revert ApprovedAddressNotFound(removeAddress,msg.sender,keyHash);
       }
       else{
-        revert KeyNotInUse(msg.sender, keyHash); // I think we're getting this revert even though key is in use?
+        revert KeyNotInUse(msg.sender, keyHash);
       }
       
+    }
+
+    function approvedAddressExists(address userAddress, string memory keyHash, address approvedAddress) private returns (bool success){ // Very similar code to remove but not sure remove could use this
+      if(keyInUse(userAddress,keyHash)){ // Don't waste computing power (and thus Ethereum) looping through if the key isn't being used
+        bytes memory keyBytes = abi.encodePacked(keyHash);
+        address[] memory approvedAddressList = approvedAddresses[abi.encodePacked(userAddress, keyBytes)];
+        for(uint i; i < approvedAddressList.length; i++){  // Iterates through the users approved addresses
+          if (approvedAddressList[i] == approvedAddress){ // Checks if the address exists in approvedAddresses
+            return(true);
+          }
+        }
+        return(false);
+      }
+      else{
+        revert KeyNotInUse(userAddress, keyHash);
+      }
+
     }
 
 }

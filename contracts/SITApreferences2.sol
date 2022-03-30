@@ -78,4 +78,23 @@ contract SITApreferences2{
        }
     }
 
+    function removeApprovedAddress(address removeAddress, string memory keyHash) public returns (bool success){ // This should probably be converted to a helper function to prevent duplicate values, assuming hash-sets don't exist in Solidity
+      if(keyInUse(msg.sender,keyHash)){
+        bytes memory keyBytes = abi.encodePacked(keyHash);
+        address[] memory approvedAddressList = approvedAddresses[abi.encodePacked(msg.sender, keyBytes)]; // Gets the list to reduce the complexity of the for loop
+        for(uint i; i < approvedAddressList.length; i++){  // Iterates through the users approved addresses
+          if (approvedAddressList[i] == removeAddress){ // Attempts to find the address to be removed
+            approvedAddresses[abi.encodePacked(msg.sender, keyBytes)][i] = approvedAddresses[abi.encodePacked(msg.sender, keyBytes)][approvedAddressList.length - 1]; // Sets the index of address to be removed to be equal to the last address in the array
+            approvedAddresses[abi.encodePacked(msg.sender, keyBytes)].pop(); // Pops the last address in the array, the last address now occupies [i] 
+            return (true);
+          }
+        }
+        return (false); //  Need approved address not found error here
+      }
+      else{
+        revert KeyNotInUse(msg.sender, keyHash); // I think we're getting this revert even though key is in use?
+      }
+      
+    }
+
 }

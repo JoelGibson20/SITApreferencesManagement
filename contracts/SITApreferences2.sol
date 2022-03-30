@@ -1,5 +1,8 @@
 pragma solidity ^0.8.4;
  
+// These custom errors unfortunately do not display in the Truffle Console
+// https://github.com/trufflesuite/truffle/issues/4123
+
 /// Preferences not found for this address + H(key) combination.
 /// @param userAddress Address used.
 /// @param hashKey Hashed key used.
@@ -9,6 +12,12 @@ error PreferencesNotFound(address userAddress, string hashKey);
 /// @param userAddress Address used.
 /// @param hashKey Hashed key used.
 error KeyNotInUse(address userAddress, string hashKey);
+
+/// This address was not found in approvedAddresses for this address + H(key) combination.
+/// @param approvedAddress Approved Address.
+/// @param userAddress Address used.
+/// @param hashKey Hashed key used.
+error ApprovedAddressNotFound(address approvedAddress,address userAddress, string hashKey);
  
 contract SITApreferences2{
     mapping(bytes => string) private userpreferences; // Mapping bytes (address + key) as you cant use struct or array as mapping keys
@@ -89,7 +98,7 @@ contract SITApreferences2{
             return (true);
           }
         }
-        return (false); //  Need approved address not found error here
+        revert ApprovedAddressNotFound(removeAddress,msg.sender,keyHash);
       }
       else{
         revert KeyNotInUse(msg.sender, keyHash); // I think we're getting this revert even though key is in use?

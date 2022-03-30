@@ -14,7 +14,7 @@ error PreferencesNotFound(address userAddress, string hashKey);
 error KeyNotInUse(address userAddress, string hashKey);
 
 /// This address was not found in approvedAddresses for this address + H(key) combination.
-/// @param approvedAddress Approved Address.
+/// @param approvedAddress Approved Address used.
 /// @param userAddress Address used.
 /// @param hashKey Hashed key used.
 error ApprovedAddressNotFound(address approvedAddress,address userAddress, string hashKey);
@@ -123,7 +123,7 @@ contract SITApreferences2{
         return(false);
       }
       else{
-        revert KeyNotInUse(userAddress, keyHash);
+        revert ApprovedAddressNotFound(approvedAddress,userAddress,keyHash); // Provide Approved Address not found error instead of key not in use error to prevent leaking whether a user is using a certain key
       }
 
     }

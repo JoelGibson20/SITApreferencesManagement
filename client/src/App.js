@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import SimpleStorageContract from "./contracts/SimpleStorage.json";
 import getWeb3 from "./getWeb3";
 import SITAPreferencesContract from "./contracts/SITApreferences2.json";
 import cryptoMethods, {encryptPreferences, decryptPreferences, genKey, hashKey} from "./crypto-methods";

@@ -73,18 +73,25 @@ contract SITApreferences2{
       bytes memory keyBytes = abi.encodePacked(keyHash); // Convert string parameter for the secret key to bytes
       // Delete just leaves all the entries under these keys as the default ('' for strings, and empty arrays)
       // getPreferences, getApprovedAddresses etc don't work as the key is no longer in use
-      delete approvedAddresses[abi.encodePacked(msg.sender, keyBytes)];
-      delete userpreferences[abi.encodePacked(msg.sender, keyBytes)]; 
+      if(keyInUse(msg.sender,keyHash)){
+        delete approvedAddresses[abi.encodePacked(msg.sender, keyBytes)];
+        delete userpreferences[abi.encodePacked(msg.sender, keyBytes)]; 
 
-      for(uint i; i < usedKeys[msg.sender].length; i++){ // Iterate through the user's keys
-        if (keccak256(bytes(usedKeys[msg.sender][i])) == keccak256(bytes(keyHash))){ // Compare the key in usedKeys array and the key the user has entered
-          usedKeys[msg.sender][i] = usedKeys[msg.sender][(usedKeys[msg.sender].length) - 1];
-          usedKeys[msg.sender].pop(); 
+        for(uint i; i < usedKeys[msg.sender].length; i++){ // Iterate through the user's keys
+          if (keccak256(bytes(usedKeys[msg.sender][i])) == keccak256(bytes(keyHash))){ // Compare the key in usedKeys array and the key the user has entered
+            usedKeys[msg.sender][i] = usedKeys[msg.sender][(usedKeys[msg.sender].length) - 1];
+            usedKeys[msg.sender].pop(); 
+            return(true);
+          }
         }
       }
+      else{
+        revert KeyNotInUse(msg.sender, keyHash);
+      }
+
     }
 
-    function keyInUse(address userAddress, string memory keyHash) private returns(bool keyExists){ // Helper function to check if a key already exists in keysUsed
+    function keyInUse(address userAddress, string memory keyHash) private view returns(bool keyExists){ // Helper function to check if a key already exists in keysUsed
       keyExists = false; // Boolean value for whether the key exists yet or not
 
       for(uint i; i < usedKeys[userAddress].length; i++){ // Iterate through the user's keys
@@ -111,7 +118,7 @@ contract SITApreferences2{
 
     }
 
-    function getApprovedAddresses(string memory keyHash) public returns(address[] memory addresses){
+    function getApprovedAddresses(string memory keyHash) public view returns(address[] memory addresses){
        if(keyInUse(msg.sender,keyHash)){
         bytes memory keyBytes = abi.encodePacked(keyHash);
         return(approvedAddresses[abi.encodePacked(msg.sender, keyBytes)]);
@@ -143,7 +150,7 @@ contract SITApreferences2{
       
     }
 
-    function approvedAddressExists(address userAddress, string memory keyHash, address approvedAddress) private returns (bool success){ // Very similar code to remove but not sure remove could use this
+    function approvedAddressExists(address userAddress, string memory keyHash, address approvedAddress) private view returns (bool success){ // Very similar code to remove but not sure remove could use this
       if(keyInUse(userAddress,keyHash)){ // Don't waste computing power (and thus Ethereum) looping through if the key isn't being used
         bytes memory keyBytes = abi.encodePacked(keyHash);
         address[] memory approvedAddressList = approvedAddresses[abi.encodePacked(userAddress, keyBytes)];

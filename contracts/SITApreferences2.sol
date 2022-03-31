@@ -84,8 +84,6 @@ contract SITApreferences2{
       }
     }
 
-
-
     function keyInUse(address userAddress, string memory keyHash) private returns(bool keyExists){ // Helper function to check if a key already exists in keysUsed
       keyExists = false; // Boolean value for whether the key exists yet or not
 
@@ -160,6 +158,14 @@ contract SITApreferences2{
         revert ApprovedAddressNotFound(approvedAddress,userAddress,keyHash); // Provide Approved Address not found error instead of key not in use error to prevent leaking whether a user is using a certain key
       }
 
+    }
+
+    function deleteAllPreferences() public{
+      string[] memory keysInUse = usedKeys[msg.sender];
+
+      for(uint i; i < keysInUse.length; i++){
+        deletePreferences(keysInUse[i]);
+      }
     }
 
 }

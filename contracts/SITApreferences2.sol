@@ -18,6 +18,11 @@ error KeyNotInUse(address userAddress, string hashKey);
 /// @param userAddress Address used.
 /// @param hashKey Hashed key used.
 error ApprovedAddressNotFound(address approvedAddress,address userAddress, string hashKey);
+
+/// Can't remove your own address from approved addresses.
+/// @param userAddress Your address.
+/// @param hashKey Hashed key used.
+error CantRemoveOwnAddress(address userAddress, string hashKey);
  
 contract SITApreferences2{
     mapping(bytes => string) private userpreferences; // Mapping bytes (address + key) as you cant use struct or array as mapping keys
@@ -110,6 +115,9 @@ contract SITApreferences2{
     }
 
     function removeApprovedAddress(address removeAddress, string memory keyHash) public returns (bool success){ 
+      if(removeAddress == msg.sender){
+        revert CantRemoveOwnAddress(msg.sender, keyHash);
+      }
       if(keyInUse(msg.sender,keyHash)){ // Don't waste computing power (and thus Ethereum) looping through if the key isn't being used
         bytes memory keyBytes = abi.encodePacked(keyHash);
         address[] memory approvedAddressList = approvedAddresses[abi.encodePacked(msg.sender, keyBytes)]; // Gets the list to reduce the complexity of the for loop

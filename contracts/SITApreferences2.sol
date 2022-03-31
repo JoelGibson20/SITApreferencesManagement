@@ -41,6 +41,8 @@ contract SITApreferences2{
     constructor(){}
 
     function setPreferences(string memory preferences, string memory key) public returns(bool success){ 
+      require(keccak256(bytes(preferences)) != keccak256(bytes("")), "Preferences must be a string.");
+      require(keccak256(bytes(key)) != keccak256(bytes("")), "Key must be a string.");
       // Stores user's preferences in the contract under the key, can only modify your own preferences
 
       if (!(keyInUse(msg.sender,key))){ 

@@ -23,6 +23,12 @@ error ApprovedAddressNotFound(address approvedAddress,address userAddress, strin
 /// @param userAddress Your address.
 /// @param hashKey Hashed key used.
 error CantRemoveOwnAddress(address userAddress, string hashKey);
+
+/// This address already exists approvedAddresses for this address + H(key) combination.
+/// @param approvedAddress Approved Address used.
+/// @param userAddress Address used.
+/// @param hashKey Hashed key used.
+error ApprovedAddressAlreadyExists(address approvedAddress,address userAddress, string hashKey);
  
 contract SITApreferences2{
     mapping(bytes => string) private userpreferences; // Mapping bytes (address + key) as you cant use struct or array as mapping keys
@@ -94,6 +100,9 @@ contract SITApreferences2{
 
     function addApprovedAddress(address approvedAddress, string memory keyHash) public returns(bool success){
       if(keyInUse(msg.sender,keyHash)){
+        if (approvedAddressExists(msg.sender, keyHash,approvedAddress)){
+          revert ApprovedAddressAlreadyExists(approvedAddress,msg.sender,keyHash);
+        }
         bytes memory keyBytes = abi.encodePacked(keyHash);
         approvedAddresses[abi.encodePacked(msg.sender, keyBytes)].push(approvedAddress);
         return (true);

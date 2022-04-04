@@ -28,9 +28,19 @@ class App extends Component {
         deployedNetwork && deployedNetwork.address,
       );
 
+      var account = web3.currentProvider.selectedAddress;
+      console.log("test:", account);
+/*       web3.eth.getCoinbase(function(err,account){
+        if(err === null){
+          console.log("account: ", account);
+          this.setState({address: account});
+        }
+      });
+       */
+
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: instance }, this.runExample); // runExample is run here
+      this.setState({ web3, accounts, contract: instance, address: account}, this.runExample); // runExample is run here
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -43,11 +53,11 @@ class App extends Component {
   runExample = async () => { 
     const { accounts, contract } = this.state;
 
-  this.state.web3.eth.getCoinbase(function(err, account) {
+/*   this.state.web3.eth.getCoinbase(function(err, account) {
       if (err === null) {
         console.log("account = ", account);
       }
-    });
+    }); */
         
     /* var key = genKey(); // Generates an AES key (returned in hexadecimal)
     var encPref = encryptPreferences("Hello testing test testing yes", key); //Encrypts text using AES-256 (used to encrypt SITA preferences string eg: "1234")
@@ -79,7 +89,7 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <YourAccount web3 = {this.state.web3} onGetAddress = {this.handleGetAddress}/>
+        <YourAccount address = {this.state.address}/>
         <h1>Good to Go!</h1>
         <p>Your Truffle Box is installed and ready.</p>
         <h2>Smart Contract Example</h2>
@@ -99,23 +109,12 @@ class App extends Component {
 class YourAccount extends Component{
 	constructor(props){
 		super(props);
-		this.state = {web3: props.web3, address: '0x0'};
-    this.getAddress = this.getAddress.bind(this);
-    this.setState({address: this.getAddress()});
-    this.props.onGetAddress(this.state.address);
+    this.state = {address: this.props.address};
 	}
 
-  getAddress(){
-    this.state.web3.eth.getCoinbase(function(err,account){
-      if(err === null){
-        return(account);
-
-      }
-    });
-  }
 	
 	render(){
-		const address = this.state.address;
+    const address = this.state.address;
 		return(	
 			<p> Your Account: {address} </p>
 		);

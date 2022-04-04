@@ -39,14 +39,20 @@ class App extends Component {
   runExample = async () => { 
     const { accounts, contract } = this.state;
 
-    var key = genKey(); // Generates an AES key (returned in hexadecimal)
+  this.state.web3.eth.getCoinbase(function(err, account) {
+      if (err === null) {
+        console.log("account = ", account);
+      }
+    });
+        
+    /* var key = genKey(); // Generates an AES key (returned in hexadecimal)
     var encPref = encryptPreferences("Hello testing test testing yes", key); //Encrypts text using AES-256 (used to encrypt SITA preferences string eg: "1234")
     console.log("encPref = ", encPref);
 
     await contract.methods.setPreferences(encPref,hashKey(key)).send({from: accounts[0]}); // Stores encrypted preferences (as hex string) in the contract
     var retrPref = await contract.methods.getPreferences(accounts[0],hashKey(key)).call() // Retrieves the encrypted preferences hex string from the contract
     console.log("retrPref = ", retrPref);
-    console.log(decryptPreferences(retrPref,key)); // Decrypts the preferences 
+    console.log(decryptPreferences(retrPref,key)); // Decrypts the preferences  */
     
     /*
     // Stores a given value, 5 by default.

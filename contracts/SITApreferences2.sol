@@ -205,7 +205,7 @@ contract SITApreferences2{
 
       string[] memory keysInUse = usedKeys[msg.sender]; // Gets all the keys the user has
 
-      for(uint i; i < keysInUse.length; i++){ // Iterates throigh all the keys the user has
+      for(uint i; i < keysInUse.length; i++){ // Iterates through all the keys the user has
         deletePreferences(keysInUse[i]); // Deletes the preference set under this key
       }
     }

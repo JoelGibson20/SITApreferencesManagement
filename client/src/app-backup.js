@@ -6,11 +6,7 @@ import cryptoMethods, {encryptPreferences, decryptPreferences, genKey, hashKey} 
 import "./App.css";
 
 class App extends Component {
-  constructor(props){
-    super(props);
-    this.state = { storageValue: 0, web3: null, accounts: null, contract: null, address: '0x0'};
-    this.handleGetAddress = this.handleGetAddress.bind(this);
-  }
+  state = { storageValue: 0, web3: null, accounts: null, contract: null };
 
   componentDidMount = async () => {
     try {
@@ -69,17 +65,12 @@ class App extends Component {
     this.setState({ storageValue: response }); */ 
   };
 
-  handleGetAddress(userAddress){
-    this.setState({address: userAddress});
-  }
-
   render() {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
     }
     return (
       <div className="App">
-        <YourAccount web3 = {this.state.web3} onGetAddress = {this.handleGetAddress}/>
         <h1>Good to Go!</h1>
         <p>Your Truffle Box is installed and ready.</p>
         <h2>Smart Contract Example</h2>
@@ -95,32 +86,5 @@ class App extends Component {
     );
   }
 }
-
-class YourAccount extends Component{
-	constructor(props){
-		super(props);
-		this.state = {web3: props.web3, address: '0x0'};
-    this.getAddress = this.getAddress.bind(this);
-    this.setState({address: this.getAddress()});
-    this.props.onGetAddress(this.state.address);
-	}
-
-  getAddress(){
-    this.state.web3.eth.getCoinbase(function(err,account){
-      if(err === null){
-        return(account);
-
-      }
-    });
-  }
-	
-	render(){
-		const address = this.state.address;
-		return(	
-			<p> Your Account: {address} </p>
-		);
-	}
-}
-
 
 export default App;

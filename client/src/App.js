@@ -8,7 +8,8 @@ import "./App.css";
 class App extends Component {
   constructor(props){
     super(props);
-    this.state = { storageValue: 0, web3: null, accounts: null, contract: null, address: '0x0'};
+    this.state = { storageValue: 0, web3: null, accounts: null, contract: null, address: '0x0', key: ''};
+    this.setKey = this.setKey.bind(this);
   }
 
   componentDidMount = async () => {
@@ -70,6 +71,11 @@ class App extends Component {
     this.setState({ storageValue: response }); */ 
   };
 
+  setKey(newKey){
+    this.setState({key: newKey});
+    console.log(this.state.key);
+  }
+
   render() {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract...</div>;
@@ -78,7 +84,7 @@ class App extends Component {
       <div className="App">
         <div className="TopBar">
         <YourAccount address = {this.state.address}/>
-        <KeyManagement/>
+        <KeyManagement setKey= {this.setKey} />
         </div>
         <h1>Good to Go!</h1>
         <p>Your Truffle Box is installed and ready.</p>
@@ -122,32 +128,39 @@ class KeyManagement extends Component{
   }
 
   handleChange(event){
+    event.preventDefault();
     this.setState({key: event.target.value});
-    //this.props.getKey(event.target.value) // Method in app that sets app state key
   }
 
   onGetNewKey(){
-
+    console.log(genKey());
   }
 
-  onRetrievePreferences(){
+  onRetrievePreferences(event){
+    event.preventDefault();
     console.log("retrieve");
+    this.props.setKey(this.state.key) // Method in app that sets app state key
 
   }
 
   onDeletePreferences(){
-
+    console.log("delete");
   }
 
   render(){
     return(
-      <form>
+      <div>
+      <form onSubmit={this.onRetrievePreferences}>
         <label>
           Secret Key:
-          <input type="text" value={this.state.key} onChange={this.handleChange} />
+          <input type="text" value={this.state.key} onChange={this.handleChange}/>
         </label>
-        <button onClick={this.onRetrievePreferences}>Retrieve</button>
+        <input type="submit" value="Retrieve"></input>
       </form>
+      <br/>
+      <button onClick={this.onGetNewKey}>Get New Key</button>
+      <button onClick={this.onDeletePreferences}>Delete These Preferences</button>
+      </div>
     );
   }
 }

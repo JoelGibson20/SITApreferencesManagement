@@ -123,7 +123,7 @@ contract SITApreferences2{
         // Only add approved address if the preferences exist
         if (approvedAddressExists(msg.sender, keyHash,approvedAddress)){
           // Prevents duplicate entries in approvedAddresses, returns error
-          revert ApprovedAddressAlreadyExists(approvedAddress,msg.sender,keyHash);
+          return(true); // Success as address already approved
         }
         // If approved address isn't already present
         bytes memory keyBytes = abi.encodePacked(keyHash); // Convert string parameter for the secret key to bytes

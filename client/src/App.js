@@ -9,7 +9,6 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = { storageValue: 0, web3: null, accounts: null, contract: null, address: '0x0'};
-    this.handleGetAddress = this.handleGetAddress.bind(this);
   }
 
   componentDidMount = async () => {
@@ -70,10 +69,6 @@ class App extends Component {
     // Update state with the result.
     this.setState({ storageValue: response }); */ 
   };
-
-  handleGetAddress(userAddress){
-    this.setState({address: userAddress});
-  }
 
   render() {
     if (!this.state.web3) {

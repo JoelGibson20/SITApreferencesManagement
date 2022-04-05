@@ -54,14 +54,15 @@ class App extends Component {
   runExample = async () => { 
     const { accounts, contract } = this.state;
 
-        
-    /* var key = genKey(); // Generates an AES key (returned in hexadecimal)
+    var key = genKey();
+    console.log("key: ", key);
+    //var key = this.state.key; // Generates an AES key (returned in hexadecimal)
     var encPref = encryptPreferences("Hello testing test testing yes", key); //Encrypts text using AES-256 (used to encrypt SITA preferences string eg: "1234")
     console.log("encPref = ", encPref);
-    await contract.methods.setPreferences(encPref,hashKey(key)).send({from: accounts[0]}); // Stores encrypted preferences (as hex string) in the contract
-    var retrPref = await contract.methods.getPreferences(accounts[0],hashKey(key)).call({from: accounts[0]}); // Retrieves the encrypted preferences hex string from the contract
+    await contract.methods.setPreferences(encPref,hashKey(key)).send({from: this.state.address}); // Stores encrypted preferences (as hex string) in the contract
+    var retrPref = await contract.methods.getPreferences(this.state.address,hashKey(key)).call({from: this.state.address}); // Retrieves the encrypted preferences hex string from the contract
     console.log("retrPref = ", retrPref);
-    console.log(decryptPreferences(retrPref,key)); // Decrypts the preferences   */
+    console.log(decryptPreferences(retrPref,key)); // Decrypts the preferences 
     
     /*
     // Stores a given value, 5 by default.
@@ -89,7 +90,7 @@ class App extends Component {
       <div className="App">
         <div className="TopBar">
         <YourAccount address = {this.state.address}/>
-        <KeyManagement setKey= {this.setKey} />
+        <KeyManagement setKey = {this.setKey} address = {this.state.address} contract = {this.state.contract} />
         </div>
         <h1>Good to Go!</h1>
         <p>Your Truffle Box is installed and ready.</p>
@@ -124,7 +125,7 @@ class YourAccount extends Component{
 class KeyManagement extends Component{
   constructor(props){
     super(props);
-    this.state = {key: ''};
+    this.state = {key: '', address: props.address, contract: props.contract};
 
     this.handleChange = this.handleChange.bind(this);
     this.onGetNewKey = this.onGetNewKey.bind(this);
@@ -146,10 +147,12 @@ class KeyManagement extends Component{
     this.setState({key: genKey()}, this.setStateKey );
   }
 
-  onRetrievePreferences(event){
+  async onRetrievePreferences(event){
     event.preventDefault();
-    console.log("retrieve");
+    console.log("address: ", this.props.address);
+    var retrPref = await this.props.contract.methods.getPreferences(this.props.address, hashKey(this.state.key)).call({from: this.props.address});
     
+    console.log("retPref = ", retrPref)
   }
 
   onDeletePreferences(){

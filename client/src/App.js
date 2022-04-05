@@ -151,8 +151,11 @@ class KeyManagement extends Component{
     event.preventDefault();
     console.log("address: ", this.props.address);
     var retrPref = await this.props.contract.methods.getPreferences(this.props.address, hashKey(this.state.key)).call({from: this.props.address});
-    
-    console.log("retPref = ", retrPref)
+    // How to make pop-up appear when this returns an error to tell the user these preferences weren't found
+    console.log("retrPref = ", retrPref)
+    var decPref = decryptPreferences(retrPref,this.state.key);
+    console.log("decPref: ", decPref);
+    // Will require calling of a app component method here to set the preferences state. This will then be fed to the preferences form
   }
 
   onDeletePreferences(){

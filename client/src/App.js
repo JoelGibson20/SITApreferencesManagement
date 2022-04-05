@@ -53,13 +53,13 @@ class App extends Component {
     const { accounts, contract } = this.state;
 
         
-    var key = genKey(); // Generates an AES key (returned in hexadecimal)
+    /* var key = genKey(); // Generates an AES key (returned in hexadecimal)
     var encPref = encryptPreferences("Hello testing test testing yes", key); //Encrypts text using AES-256 (used to encrypt SITA preferences string eg: "1234")
     console.log("encPref = ", encPref);
     await contract.methods.setPreferences(encPref,hashKey(key)).send({from: accounts[0]}); // Stores encrypted preferences (as hex string) in the contract
     var retrPref = await contract.methods.getPreferences(accounts[0],hashKey(key)).call({from: accounts[0]}); // Retrieves the encrypted preferences hex string from the contract
     console.log("retrPref = ", retrPref);
-    console.log(decryptPreferences(retrPref,key)); // Decrypts the preferences  
+    console.log(decryptPreferences(retrPref,key)); // Decrypts the preferences   */
     
     /*
     // Stores a given value, 5 by default.
@@ -78,6 +78,7 @@ class App extends Component {
       <div className="App">
         <div className="TopBar">
         <YourAccount address = {this.state.address}/>
+        <KeyManagement/>
         </div>
         <h1>Good to Go!</h1>
         <p>Your Truffle Box is installed and ready.</p>
@@ -107,6 +108,48 @@ class YourAccount extends Component{
 			<p> Your Account: {address} </p>
 		);
 	}
+}
+
+class KeyManagement extends Component{
+  constructor(props){
+    super(props);
+    this.state = {key: ''};
+
+    this.handleChange = this.handleChange.bind(this);
+    this.onGetNewKey = this.onGetNewKey.bind(this);
+    this.onRetrievePreferences = this.onRetrievePreferences.bind(this);
+    this.onDeletePreferences= this.onDeletePreferences.bind(this);
+  }
+
+  handleChange(event){
+    this.setState({key: event.target.value});
+    //this.props.getKey(event.target.value) // Method in app that sets app state key
+  }
+
+  onGetNewKey(){
+
+  }
+
+  onRetrievePreferences(){
+    console.log("retrieve");
+
+  }
+
+  onDeletePreferences(){
+
+  }
+
+  render(){
+    return(
+      <form>
+        <label>
+          Secret Key:
+          <input type="text" value={this.state.key} onChange={this.handleChange} />
+        </label>
+        <button onClick={this.onRetrievePreferences}>Retrieve</button>
+      </form>
+    );
+  }
 }
 
 

@@ -76,7 +76,9 @@ class App extends Component {
     }
     return (
       <div className="App">
+        <div class="TopBar">
         <YourAccount address = {this.state.address}/>
+        </div>
         <h1>Good to Go!</h1>
         <p>Your Truffle Box is installed and ready.</p>
         <h2>Smart Contract Example</h2>

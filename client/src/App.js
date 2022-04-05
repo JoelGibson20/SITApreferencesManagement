@@ -8,9 +8,12 @@ import "./App.css";
 class App extends Component {
   constructor(props){
     super(props);
-    this.state = { storageValue: 0, web3: null, accounts: null, contract: null, address: '0x0', key: ''};
+    this.state = { storageValue: 0, web3: null, accounts: null, contract: null, address: '0x0', key: '', pref: ''};
     this.setKey = this.setKey.bind(this);
     this.outputKey = this.outputKey.bind(this);
+
+    this.setPref = this.setPref.bind(this);
+    this.outputPref = this.outputPref.bind(this);
   }
 
   componentDidMount = async () => {
@@ -78,9 +81,18 @@ class App extends Component {
     this.setState({key: newKey}, this.outputKey);
   }
 
-  outputKey(){
+  outputKey(){ // Remove this, just a testing method to show the key was passed and set properly
     console.log("state key: ",this.state.key);
   }
+
+  setPref(prefs){
+    this.setState({pref: prefs}, this.outputPref);
+  }
+
+  outputPref(){
+    console.log("prefs: ", this.state.pref);
+  }
+
 
   render() {
     if (!this.state.web3) {
@@ -90,7 +102,7 @@ class App extends Component {
       <div className="App">
         <div className="TopBar">
         <YourAccount address = {this.state.address}/>
-        <KeyManagement setKey = {this.setKey} address = {this.state.address} contract = {this.state.contract} />
+        <KeyManagement setKey = {this.setKey} setPref = {this.setPref} address = {this.state.address} contract = {this.state.contract} />
         </div>
         <h1>Good to Go!</h1>
         <p>Your Truffle Box is installed and ready.</p>
@@ -149,13 +161,10 @@ class KeyManagement extends Component{
 
   async onRetrievePreferences(event){
     event.preventDefault();
-    console.log("address: ", this.props.address);
-    var retrPref = await this.props.contract.methods.getPreferences(this.props.address, hashKey(this.state.key)).call({from: this.props.address});
+    var retrPref = await this.props.contract.methods.getPreferences(this.props.address, hashKey(this.state.key)).call({from: this.props.address}); // Attempts to retrieve preferences for this address + key combo
     // How to make pop-up appear when this returns an error to tell the user these preferences weren't found
-    console.log("retrPref = ", retrPref)
-    var decPref = decryptPreferences(retrPref,this.state.key);
-    console.log("decPref: ", decPref);
-    // Will require calling of a app component method here to set the preferences state. This will then be fed to the preferences form
+    var decPref = decryptPreferences(retrPref,this.state.key); // Decrypts the retrieved encrypted preferences
+    this.props.setPref(decPref); // Calls the method to update prefs in app state
   }
 
   onDeletePreferences(){

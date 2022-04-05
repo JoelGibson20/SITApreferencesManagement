@@ -76,7 +76,7 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <div class="TopBar">
+        <div className="TopBar">
         <YourAccount address = {this.state.address}/>
         </div>
         <h1>Good to Go!</h1>
@@ -98,12 +98,11 @@ class App extends Component {
 class YourAccount extends Component{
 	constructor(props){
 		super(props);
-    this.state = {address: this.props.address};
 	}
 
 	
 	render(){
-    const address = this.state.address;
+    const address = this.props.address;
 		return(	
 			<p> Your Account: {address} </p>
 		);

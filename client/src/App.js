@@ -10,6 +10,7 @@ class App extends Component {
     super(props);
     this.state = { storageValue: 0, web3: null, accounts: null, contract: null, address: '0x0', key: ''};
     this.setKey = this.setKey.bind(this);
+    this.outputKey = this.outputKey.bind(this);
   }
 
   componentDidMount = async () => {
@@ -72,8 +73,12 @@ class App extends Component {
   };
 
   setKey(newKey){
-    this.setState({key: newKey});
-    console.log(this.state.key);
+    //console.log("Key received: ",newKey);
+    this.setState({key: newKey}, this.outputKey);
+  }
+
+  outputKey(){
+    console.log("state key: ",this.state.key);
   }
 
   render() {
@@ -125,11 +130,16 @@ class KeyManagement extends Component{
     this.onGetNewKey = this.onGetNewKey.bind(this);
     this.onRetrievePreferences = this.onRetrievePreferences.bind(this);
     this.onDeletePreferences= this.onDeletePreferences.bind(this);
+    this.setStateKey= this.setStateKey.bind(this);
+  }
+
+  setStateKey(){
+    this.props.setKey(this.state.key);
   }
 
   handleChange(event){
     event.preventDefault();
-    this.setState({key: event.target.value});
+    this.setState({key: event.target.value}, this.setStateKey);
   }
 
   onGetNewKey(){
@@ -139,8 +149,7 @@ class KeyManagement extends Component{
   onRetrievePreferences(event){
     event.preventDefault();
     console.log("retrieve");
-    this.props.setKey(this.state.key) // Method in app that sets app state key
-
+    
   }
 
   onDeletePreferences(){

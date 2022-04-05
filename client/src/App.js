@@ -143,7 +143,7 @@ class KeyManagement extends Component{
   }
 
   onGetNewKey(){
-    console.log(genKey());
+    this.setState({key: genKey()}, this.setStateKey );
   }
 
   onRetrievePreferences(event){

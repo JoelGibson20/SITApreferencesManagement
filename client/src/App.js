@@ -57,7 +57,7 @@ class App extends Component {
   runExample = async () => { 
     const { accounts, contract } = this.state;
 
-    var key = genKey();
+    /* var key = genKey();
     console.log("key: ", key);
     //var key = this.state.key; // Generates an AES key (returned in hexadecimal)
     var encPref = encryptPreferences("Hello testing test testing yes", key); //Encrypts text using AES-256 (used to encrypt SITA preferences string eg: "1234")
@@ -65,7 +65,7 @@ class App extends Component {
     await contract.methods.setPreferences(encPref,hashKey(key)).send({from: this.state.address}); // Stores encrypted preferences (as hex string) in the contract
     var retrPref = await contract.methods.getPreferences(this.state.address,hashKey(key)).call({from: this.state.address}); // Retrieves the encrypted preferences hex string from the contract
     console.log("retrPref = ", retrPref);
-    console.log(decryptPreferences(retrPref,key)); // Decrypts the preferences 
+    console.log(decryptPreferences(retrPref,key)); // Decrypts the preferences  */
     
     /*
     // Stores a given value, 5 by default.
@@ -104,17 +104,9 @@ class App extends Component {
         <YourAccount address = {this.state.address}/>
         <KeyManagement setKey = {this.setKey} setPref = {this.setPref} address = {this.state.address} contract = {this.state.contract} />
         </div>
-        <h1>Good to Go!</h1>
-        <p>Your Truffle Box is installed and ready.</p>
-        <h2>Smart Contract Example</h2>
-        <p>
-          If your contracts compiled and migrated successfully, below will show
-          a stored value of 5 (by default).
-        </p>
-        <p>
-          Try changing the value stored on <strong>line 42</strong> of App.js.
-        </p>
-        <div>The stored value is: {this.state.storageValue}</div>
+        <div className="Body">
+          <PreferencesForm/>
+        </div>
       </div>
     );
   }
@@ -189,6 +181,44 @@ class KeyManagement extends Component{
       </div>
     );
   }
+}
+
+class PreferencesForm extends Component{
+  constructor(props){
+      super(props);
+      this.state = {spatial: "0", identity: "0", temporal: "0", activity: "0"};
+
+      this.handleSpatial = this.handleSpatial.bind(this);
+
+
+  }
+
+  handleSpatial(event){
+    this.setState({spatial: event.target.value});
+  }
+
+  render(){
+    return(
+        <div>
+          <label>
+            Define Your Preferences
+              <form onSubmit={this.onSubmit}>
+                <label>
+                  Spatial
+                  <select value={this.state.spatial} onChange={this.handleSpatial}>
+                    <option value="0">0. No Information</option>
+                    <option value="1">1. Aggregation</option>
+                    <option value="2">2. Obfuscation</option>
+                    <option value="3">3. Regulation</option>
+                    <option value="4">4. Full Information</option>
+                  </select>
+                </label>
+              </form>
+          </label>
+        </div>
+    );
+  }
+
 }
 
 

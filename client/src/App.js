@@ -15,6 +15,9 @@ class App extends Component {
     this.setPref = this.setPref.bind(this);
     this.outputPref = this.outputPref.bind(this);
     this.getKey = this.getKey.bind(this);
+
+    this.preferencesFormRef = React.createRef(); // Create reference for our PreferencesForm Component
+    // This reference is used when preferences are retrieved, so that the form can be updated to show these preferences
   }
 
   componentDidMount = async () => {
@@ -92,6 +95,8 @@ class App extends Component {
 
   setPref(prefs){
     this.setState({pref: prefs}, this.outputPref);
+    this.preferencesFormRef.current.updatePrefs(this.state.pref);
+
   }
 
   outputPref(){
@@ -110,7 +115,7 @@ class App extends Component {
         <KeyManagement setKey = {this.setKey} setPref = {this.setPref} address = {this.state.address} contract = {this.state.contract} />
         </div>
         <div className="Body">
-          <PreferencesForm address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey}/>
+          <PreferencesForm ref = {this.preferencesFormRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey}/>
         </div>
       </div>
     );
@@ -159,7 +164,7 @@ class KeyManagement extends Component{
   async onRetrievePreferences(event){
     event.preventDefault();
     var retrPref = await this.props.contract.methods.getPreferences(this.props.address, hashKey(this.state.key)).call({from: this.props.address}); // Attempts to retrieve preferences for this address + key combo
-    // How to make pop-up appear when this returns an error to tell the user these preferences weren't found
+    // !!! How to make pop-up appear when this returns an error to tell the user these preferences weren't found
 
     var decPref = decryptPreferences(retrPref,this.state.key); // Decrypts the retrieved encrypted preferences
     this.props.setPref(decPref); // Calls the method to update prefs in app state
@@ -195,8 +200,13 @@ class PreferencesForm extends Component{
 
       this.handleChange = this.handleChange.bind(this);
       this.onSubmit = this.onSubmit.bind(this);
+      this.updatePrefs = this.updatePrefs.bind(this);
 
 
+  }
+
+  updatePrefs(prefs){
+    this.setState({spatial: prefs[0], identity: prefs[1], temporal: prefs[2], activity: prefs[3]})
   }
 
   handleChange(event){

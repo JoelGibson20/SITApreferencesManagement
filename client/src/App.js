@@ -157,6 +157,7 @@ class KeyManagement extends Component{
   }
 
   onGetNewKey(){
+    // !!! Want to make a "Please save your current key so you don't forget it before proceeding"
     this.setState({key: genKey()}, this.setStateKey );
   }
 
@@ -170,6 +171,7 @@ class KeyManagement extends Component{
   }
 
   async onDeletePreferences(){
+    // !!! Want to make an are you sure? confirmation
     var success = await this.props.contract.methods.deletePreferences(hashKey(this.state.key)).send({from: this.props.address});
     console.log(success); // !!! Message to user based on success (Preferences deleted!, or Preferences not found)
     if(success){

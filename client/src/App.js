@@ -18,6 +18,8 @@ class App extends Component {
 
     this.preferencesFormRef = React.createRef(); // Create reference for our PreferencesForm Component
     // This reference is used when preferences are retrieved, so that the form can be updated to show these preferences
+
+    this.approvedAddressesRef = React.createRef();
   }
 
   componentDidMount = async () => {
@@ -60,7 +62,8 @@ class App extends Component {
 
   runExample = async () => { 
     const { accounts, contract } = this.state;
-
+    
+    this.approvedAddressesRef.current.updateApprovedAddresses(["test1","test2","test3"]);
     /* var key = genKey();
     console.log("key: ", key);
     //var key = this.state.key; // Generates an AES key (returned in hexadecimal)
@@ -115,6 +118,7 @@ class App extends Component {
         </div>
         <div className="Body">
           <PreferencesForm ref = {this.preferencesFormRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey}/>
+          <ApprovedAddresses ref = {this.approvedAddressesRef} address = {this.state.address} />
         </div>
       </div>
     );
@@ -308,6 +312,37 @@ class PreferencesForm extends Component{
     );
   }
 
+}
+
+class ApprovedAddresses extends Component{
+  constructor(props){
+    super(props);
+    this.state = {address: this.props.address, approvedAddresses: []};
+
+    this.updateApprovedAddresses = this.updateApprovedAddresses.bind(this);
+  }
+
+  updateApprovedAddresses(newApprovedAddresses){
+    this.setState({approvedAddresses: newApprovedAddresses});
+  }
+
+  render(){
+    let addressList = this.state.approvedAddresses.length > 0 // If there is an approved address
+    && this.state.approvedAddresses.map((address) => { // Iterate through the approved addresses and map them to a select option for the drop-down
+      return(
+        <option key={address} value={address}>{address}</option>
+      )
+
+    }, this);
+
+    return(
+      <div>
+        <select>
+          {addressList} 
+        </select>
+      </div>
+    );
+  }
 }
 
 

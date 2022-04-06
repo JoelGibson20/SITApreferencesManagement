@@ -170,6 +170,7 @@ class KeyManagement extends Component{
   onGetNewKey(){
     // !!! Want to make a "Please save your current key so you don't forget it before proceeding"
     this.setState({key: genKey()}, this.setStateKey );
+    this.props.setApprovedAddresses([]); // Resets the approved addresses field on creation of a new key
   }
 
   async onRetrievePreferences(event){

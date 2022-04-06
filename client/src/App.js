@@ -96,7 +96,6 @@ class App extends Component {
   setPref(prefs){
     this.setState({pref: prefs}, this.outputPref);
     this.preferencesFormRef.current.updatePrefs(this.state.pref);
-
   }
 
   outputPref(){
@@ -172,7 +171,11 @@ class KeyManagement extends Component{
 
   async onDeletePreferences(){
     var success = await this.props.contract.methods.deletePreferences(hashKey(this.state.key)).send({from: this.props.address});
-    console.log(success);
+    console.log(success); // !!! Message to user based on success (Preferences deleted!, or Preferences not found)
+    if(success){
+      this.setState({key: ''}, this.setStateKey); // Clears secret key input after preferences deleted
+      this.props.setPref('0000'); // Resets preference form back to default
+    }
   }
 
   render(){
@@ -212,19 +215,19 @@ class PreferencesForm extends Component{
   handleChange(event){
     console.log("target: ", event.target.id);
     console.log("value:", event.target.value);
-    if(event.target.id == "spatial"){
+    if(event.target.id === "spatial"){
       this.setState({spatial: event.target.value});
     }
 
-    if(event.target.id == "identity"){
+    if(event.target.id === "identity"){
       this.setState({identity: event.target.value});
     }
 
-    if(event.target.id == "temporal"){
+    if(event.target.id === "temporal"){
       this.setState({temporal: event.target.value});
     }
 
-    if(event.target.id == "activity"){
+    if(event.target.id === "activity"){
       this.setState({activity: event.target.value});
     }
     
@@ -236,7 +239,7 @@ class PreferencesForm extends Component{
     console.log("prefs: ", prefs);
     var key = this.props.getKey();
 
-    if(key.length != 64){ // Checks key is of right length, otherwise don't try and encrypt (encryption with wrong key length causes error)
+    if(key.length !== 64){ // Checks key is of right length, otherwise don't try and encrypt (encryption with wrong key length causes error)
       console.log("Key wrong length"); // Need to have this cause an alert or some message informing wrong key length
     }
     else{

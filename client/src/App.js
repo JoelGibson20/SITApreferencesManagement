@@ -14,6 +14,7 @@ class App extends Component {
 
     this.setPref = this.setPref.bind(this);
     this.outputPref = this.outputPref.bind(this);
+    this.getKey = this.getKey.bind(this);
   }
 
   componentDidMount = async () => {
@@ -81,6 +82,10 @@ class App extends Component {
     this.setState({key: newKey}, this.outputKey);
   }
 
+  getKey(){
+    return(this.state.key);
+  }
+
   outputKey(){ // Remove this, just a testing method to show the key was passed and set properly
     console.log("state key: ",this.state.key);
   }
@@ -105,7 +110,7 @@ class App extends Component {
         <KeyManagement setKey = {this.setKey} setPref = {this.setPref} address = {this.state.address} contract = {this.state.contract} />
         </div>
         <div className="Body">
-          <PreferencesForm/>
+          <PreferencesForm address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey}/>
         </div>
       </div>
     );
@@ -189,12 +194,14 @@ class PreferencesForm extends Component{
       this.state = {spatial: "0", identity: "0", temporal: "0", activity: "0"};
 
       this.handleChange = this.handleChange.bind(this);
+      this.onSubmit = this.onSubmit.bind(this);
 
 
   }
 
   handleChange(event){
     console.log("target: ", event.target.id);
+    console.log("value:", event.target.value);
     if(event.target.id == "spatial"){
       this.setState({spatial: event.target.value});
     }
@@ -211,6 +218,16 @@ class PreferencesForm extends Component{
       this.setState({activity: event.target.value});
     }
     
+  }
+
+  async onSubmit(event){
+    // !!! NEED TO PROVIDE AN INVALID KEY SIZE WARNING FOR WHEN NO KEY IS PROVIDED
+    event.preventDefault();
+    var prefs =  this.state.spatial + this.state.identity + this.state.temporal + this.state.activity;
+    console.log("prefs: ", prefs);
+    var encPref = encryptPreferences(prefs,this.props.getKey());
+    console.log("encPref: ", encPref);
+    await this.props.contract.methods.setPreferences(encPref,hashKey(this.props.getKey())).send({from: this.props.address});
   }
 
   render(){
@@ -262,8 +279,8 @@ class PreferencesForm extends Component{
                     <option value="4">4. Full Information</option>
                   </select>
                 </label>
-                
-              
+                <br/>
+                <input type="submit" value="Submit" />
               </form>
           </label>
         </div>

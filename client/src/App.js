@@ -198,6 +198,18 @@ class PreferencesForm extends Component{
     if(event.target.id == "spatial"){
       this.setState({spatial: event.target.value});
     }
+
+    if(event.target.id == "identity"){
+      this.setState({identity: event.target.value});
+    }
+
+    if(event.target.id == "temporal"){
+      this.setState({temporal: event.target.value});
+    }
+
+    if(event.target.id == "activity"){
+      this.setState({activity: event.target.value});
+    }
     
   }
 
@@ -208,7 +220,7 @@ class PreferencesForm extends Component{
             Define Your Preferences
               <form onSubmit={this.onSubmit}>
                 <label>
-                  Spatial
+                  Spatial:
                   <select id="spatial" value={this.state.spatial} onChange={this.handleChange}>
                     <option value="0">0. No Information</option>
                     <option value="1">1. Aggregation</option>
@@ -217,6 +229,41 @@ class PreferencesForm extends Component{
                     <option value="4">4. Full Information</option>
                   </select>
                 </label>
+                <br/>
+                <label>
+                  Identity:
+                  <select id="identity" value={this.state.identity} onChange={this.handleChange}>
+                    <option value="0">0. No Information</option>
+                    <option value="1">1. Aggregation</option>
+                    <option value="2">2. Obfuscation</option>
+                    <option value="3">3. Regulation</option>
+                    <option value="4">4. Full Information</option>
+                  </select>
+                </label>
+                <br/>
+                <label>
+                  Temporal:
+                  <select id="temporal" value={this.state.temporal} onChange={this.handleChange}>
+                    <option value="0">0. No Information</option>
+                    <option value="1">1. Aggregation</option>
+                    <option value="2">2. Obfuscation</option>
+                    <option value="3">3. Regulation</option>
+                    <option value="4">4. Full Information</option>
+                  </select>
+                </label>
+                <br/>
+                <label>
+                  Activity:
+                  <select id="activity" value={this.state.activity} onChange={this.handleChange}>
+                    <option value="0">0. No Information</option>
+                    <option value="1">1. Aggregation</option>
+                    <option value="2">2. Obfuscation</option>
+                    <option value="3">3. Regulation</option>
+                    <option value="4">4. Full Information</option>
+                  </select>
+                </label>
+                
+              
               </form>
           </label>
         </div>

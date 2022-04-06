@@ -16,10 +16,13 @@ class App extends Component {
     this.outputPref = this.outputPref.bind(this);
     this.getKey = this.getKey.bind(this);
 
+    this.setApprovedAddresses = this.setApprovedAddresses.bind(this);
+
     this.preferencesFormRef = React.createRef(); // Create reference for our PreferencesForm Component
     // This reference is used when preferences are retrieved, so that the form can be updated to show these preferences
 
-    this.approvedAddressesRef = React.createRef();
+    this.approvedAddressesRef = React.createRef(); // Create reference for our ApprovedAddresses Component
+    // This reference is used when approved addresses are retrieved alongside preferences, so that the approved addresses drop-down can be updated to show approved addresseses
   }
 
   componentDidMount = async () => {
@@ -63,7 +66,7 @@ class App extends Component {
   runExample = async () => { 
     const { accounts, contract } = this.state;
     
-    this.approvedAddressesRef.current.updateApprovedAddresses(["test1","test2","test3"]);
+    //this.approvedAddressesRef.current.updateApprovedAddresses(["test1","test2","test3"]);
     /* var key = genKey();
     console.log("key: ", key);
     //var key = this.state.key; // Generates an AES key (returned in hexadecimal)
@@ -105,6 +108,10 @@ class App extends Component {
     console.log("prefs: ", this.state.pref);
   }
 
+  setApprovedAddresses(newApprovedAddresses){
+    this.approvedAddressesRef.current.updateApprovedAddresses(newApprovedAddresses);
+  }
+
 
   render() {
     if (!this.state.web3) {
@@ -114,7 +121,7 @@ class App extends Component {
       <div className="App">
         <div className="TopBar">
         <YourAccount address = {this.state.address}/>
-        <KeyManagement setKey = {this.setKey} setPref = {this.setPref} address = {this.state.address} contract = {this.state.contract} />
+        <KeyManagement setKey = {this.setKey} setPref = {this.setPref} setApprovedAddresses = {this.setApprovedAddresses} address = {this.state.address} contract = {this.state.contract} />
         </div>
         <div className="Body">
           <PreferencesForm ref = {this.preferencesFormRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey}/>
@@ -172,6 +179,10 @@ class KeyManagement extends Component{
 
     var decPref = decryptPreferences(retrPref,this.state.key); // Decrypts the retrieved encrypted preferences
     this.props.setPref(decPref); // Calls the method to update prefs in app state
+    
+    var approvedAddresses = await this.props.contract.methods.getApprovedAddresses(hashKey(this.state.key)).call({from:this.props.address });
+    // Get the approved addresses for this preferences set
+    this.props.setApprovedAddresses(approvedAddresses); // Calls the method to update the approved addresses in the ApprovedAddresses drop-down
   }
 
   async onDeletePreferences(){
@@ -322,7 +333,7 @@ class ApprovedAddresses extends Component{
     this.updateApprovedAddresses = this.updateApprovedAddresses.bind(this);
   }
 
-  updateApprovedAddresses(newApprovedAddresses){
+  updateApprovedAddresses(newApprovedAddresses){ // Updates approved addresses with a new list of approved addresses
     this.setState({approvedAddresses: newApprovedAddresses});
   }
 
@@ -337,9 +348,12 @@ class ApprovedAddresses extends Component{
 
     return(
       <div>
+        <label>
+          Approved Addresses:
         <select>
           {addressList} 
         </select>
+        </label>
       </div>
     );
   }

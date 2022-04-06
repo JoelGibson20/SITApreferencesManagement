@@ -188,13 +188,17 @@ class PreferencesForm extends Component{
       super(props);
       this.state = {spatial: "0", identity: "0", temporal: "0", activity: "0"};
 
-      this.handleSpatial = this.handleSpatial.bind(this);
+      this.handleChange = this.handleChange.bind(this);
 
 
   }
 
-  handleSpatial(event){
-    this.setState({spatial: event.target.value});
+  handleChange(event){
+    console.log("target: ", event.target.id);
+    if(event.target.id == "spatial"){
+      this.setState({spatial: event.target.value});
+    }
+    
   }
 
   render(){
@@ -205,7 +209,7 @@ class PreferencesForm extends Component{
               <form onSubmit={this.onSubmit}>
                 <label>
                   Spatial
-                  <select value={this.state.spatial} onChange={this.handleSpatial}>
+                  <select id="spatial" value={this.state.spatial} onChange={this.handleChange}>
                     <option value="0">0. No Information</option>
                     <option value="1">1. Aggregation</option>
                     <option value="2">2. Obfuscation</option>

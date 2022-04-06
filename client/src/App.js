@@ -231,13 +231,19 @@ class PreferencesForm extends Component{
   }
 
   async onSubmit(event){
-    // !!! NEED TO PROVIDE AN INVALID KEY SIZE WARNING FOR WHEN NO KEY IS PROVIDED
     event.preventDefault();
-    var prefs =  this.state.spatial + this.state.identity + this.state.temporal + this.state.activity;
+    var prefs =  this.state.spatial + this.state.identity + this.state.temporal + this.state.activity; // Combines the dimensions into 1 string
     console.log("prefs: ", prefs);
-    var encPref = encryptPreferences(prefs,this.props.getKey());
-    console.log("encPref: ", encPref);
-    await this.props.contract.methods.setPreferences(encPref,hashKey(this.props.getKey())).send({from: this.props.address});
+    var key = this.props.getKey();
+
+    if(key.length != 64){ // Checks key is of right length, otherwise don't try and encrypt (encryption with wrong key length causes error)
+      console.log("Key wrong length"); // Need to have this cause an alert or some message informing wrong key length
+    }
+    else{
+      var encPref = encryptPreferences(prefs,key);
+      console.log("encPref: ", encPref);
+      await this.props.contract.methods.setPreferences(encPref,hashKey(this.props.getKey())).send({from: this.props.address});
+    }
   }
 
   render(){

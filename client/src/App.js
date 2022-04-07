@@ -361,6 +361,7 @@ class ApprovedAddresses extends Component{
     if(web3.utils.isAddress(this.state.newAddress)){
       var success = await this.props.contract.methods.addApprovedAddress(this.state.newAddress,hashKey(this.props.getKey())).send({from: this.props.address});
       if(success){
+        this.setState({newAddress: ''});
         this.getNewAddressList();
       }
     }

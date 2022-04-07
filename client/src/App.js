@@ -125,7 +125,7 @@ class App extends Component {
         </div>
         <div className="Body">
           <PreferencesForm ref = {this.preferencesFormRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey}/>
-          <ApprovedAddresses ref = {this.approvedAddressesRef} address = {this.state.address} />
+          <ApprovedAddresses ref = {this.approvedAddressesRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} />
         </div>
       </div>
     );

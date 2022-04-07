@@ -339,7 +339,7 @@ class ApprovedAddresses extends Component{
     this.onRemoveAddress = this.onRemoveAddress.bind(this)
   }
 
-  updateApprovedAddresses(newApprovedAddresses){ // Updates approved addresses with a new list of approved addresses
+  updateApprovedAddresses(newApprovedAddresses){ // Updates approved addresses with a new list of approved addresses(called externally)
     this.setState({approvedAddresses: newApprovedAddresses});
     this.setState({selectedAddress: this.state.approvedAddresses[0]});
   }
@@ -361,8 +361,7 @@ class ApprovedAddresses extends Component{
     if(web3.utils.isAddress(this.state.newAddress)){
       var success = await this.props.contract.methods.addApprovedAddress(this.state.newAddress,hashKey(this.props.getKey())).send({from: this.props.address});
       if(success){
-        var newApprovedAddresses = await this.props.contract.methods.getApprovedAddresses(hashKey(this.props.getKey())).call({from:this.props.address });
-        this.setState({approvedAddresses: newApprovedAddresses }); 
+        this.getNewAddressList();
       }
     }
     else{
@@ -377,6 +376,12 @@ class ApprovedAddresses extends Component{
     console.log(web3.utils.isAddress(this.state.selectedAddress));
     var success = await this.props.contract.methods.removeApprovedAddress(this.state.selectedAddress, hashKey(this.props.getKey())).send({from: this.props.address});
     console.log("success: ", success);
+    this.getNewAddressList();
+  }
+
+  async getNewAddressList(){
+    var newApprovedAddresses = await this.props.contract.methods.getApprovedAddresses(hashKey(this.props.getKey())).call({from:this.props.address });
+    this.setState({approvedAddresses: newApprovedAddresses }); 
   }
 
   render(){

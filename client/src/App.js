@@ -330,10 +330,11 @@ class PreferencesForm extends Component{
 class ApprovedAddresses extends Component{
   constructor(props){
     super(props);
-    this.state = {approvedAddresses: [], newAddress: ''};
+    this.state = {approvedAddresses: [], newAddress: '', selectedAddress: ''};
 
     this.updateApprovedAddresses = this.updateApprovedAddresses.bind(this);
-    this.handleChange = this.handleChange.bind(this);
+    this.handleNewAddressChange = this.handleNewAddressChange.bind(this);
+    this.handleRemoveAddressChange = this.handleRemoveAddressChange.bind(this);
     this.onAddAddress = this.onAddAddress.bind(this);
     this.onRemoveAddress = this.onRemoveAddress.bind(this)
   }
@@ -342,9 +343,15 @@ class ApprovedAddresses extends Component{
     this.setState({approvedAddresses: newApprovedAddresses});
   }
 
-  handleChange(event){
+  handleNewAddressChange(event){
     event.preventDefault();
     this.setState({newAddress: event.target.value});
+  }
+
+  handleRemoveAddressChange(event){
+    event.preventDefault();
+    console.log("selected value: ",event.target.value);
+    this.setState({selectedAddress: event.target.value});
   }
 
   async onAddAddress(event){
@@ -368,14 +375,14 @@ class ApprovedAddresses extends Component{
 
   onRemoveAddress(event){
     event.preventDefault();
-    console.log(event.target.value);
-    console.log(web3.utils.isAddress(event.target.value));
+    console.log(this.state.selectedAddress);
+    console.log(web3.utils.isAddress(this.state.selectedAddress));
   }
 
   render(){
     let addressList = this.state.approvedAddresses.length > 0 // If there is an approved address
     && this.state.approvedAddresses.map((address) => {
-      console.log("address: ", address.toString()); // Iterate through the approved addresses and map them to a select option for the drop-down
+      console.log("address: ", address); // Iterate through the approved addresses and map them to a select option for the drop-down
       return(
         <option key={address} value={address}>{address}</option>
       )
@@ -387,7 +394,7 @@ class ApprovedAddresses extends Component{
         <form onSubmit={this.onRemoveAddress}>
           <label>
             Approved Addresses:
-            <select>
+            <select id="approvedAddressSelect" value={this.state.selectedAddress} onChange={this.handleRemoveAddressChange}>
               {addressList} 
             </select>
             <input type="submit" value="Remove this address"></input>
@@ -397,7 +404,7 @@ class ApprovedAddresses extends Component{
         <form onSubmit={this.onAddAddress}>
         <label>
           Add an Approved Address:
-          <input type="text" value={this.state.newAddress} onChange={this.handleChange}/>
+          <input type="text" value={this.state.newAddress} onChange={this.handleNewAddressChange}/>
         </label>
         <input type="submit" value="Add new address"></input>
       </form>

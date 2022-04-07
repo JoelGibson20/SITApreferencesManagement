@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import getWeb3 from "./getWeb3";
 import SITAPreferencesContract from "./contracts/SITApreferences2.json";
 import {encryptPreferences, decryptPreferences, genKey, hashKey} from "./crypto-methods";
+import web3 from "web3";
 
 import "./App.css";
 
@@ -347,8 +348,14 @@ class ApprovedAddresses extends Component{
 
   async onAddAddress(event){
     event.preventDefault();
-    var success = await this.props.contract.methods.addApprovedAddress(this.state.newAddress,hashKey(this.props.getKey())).send({from: this.props.address});
-    console.log(success);
+    console.log(web3.utils.isAddress(this.state.newAddress));
+    if(web3.utils.isAddress(this.state.newAddress)){
+      var success = await this.props.contract.methods.addApprovedAddress(this.state.newAddress,hashKey(this.props.getKey())).send({from: this.props.address});
+      console.log(success);
+    }
+    else{
+      console.log("Not an address"); // !!! Want a pop-up here explaining address isn't valid
+    }
 
   }
 

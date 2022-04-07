@@ -329,13 +329,27 @@ class PreferencesForm extends Component{
 class ApprovedAddresses extends Component{
   constructor(props){
     super(props);
-    this.state = {address: this.props.address, approvedAddresses: []};
+    this.state = {approvedAddresses: [], newAddress: ''};
 
     this.updateApprovedAddresses = this.updateApprovedAddresses.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.onAddAddress = this.onAddAddress.bind(this);
   }
 
   updateApprovedAddresses(newApprovedAddresses){ // Updates approved addresses with a new list of approved addresses
     this.setState({approvedAddresses: newApprovedAddresses});
+  }
+
+  handleChange(event){
+    event.preventDefault();
+    this.setState({newAddress: event.target.value});
+  }
+
+  async onAddAddress(event){
+    event.preventDefault();
+    var success = await this.props.contract.methods.addApprovedAddress(this.state.newAddress,hashKey(this.props.getKey())).send({from: this.props.address});
+    console.log(success);
+
   }
 
   render(){
@@ -355,6 +369,15 @@ class ApprovedAddresses extends Component{
           {addressList} 
         </select>
         </label>
+        <br/>
+        <form onSubmit={this.onAddAddress}>
+        <label>
+          Add an Approved Address:
+          <input type="text" value={this.state.newAddress} onChange={this.handleChange}/>
+        </label>
+        <input type="submit" value="Add new address"></input>
+      </form>
+
       </div>
     );
   }

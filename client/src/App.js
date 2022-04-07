@@ -335,6 +335,7 @@ class ApprovedAddresses extends Component{
     this.updateApprovedAddresses = this.updateApprovedAddresses.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.onAddAddress = this.onAddAddress.bind(this);
+    this.onRemoveAddress = this.onRemoveAddress.bind(this)
   }
 
   updateApprovedAddresses(newApprovedAddresses){ // Updates approved addresses with a new list of approved addresses
@@ -354,6 +355,9 @@ class ApprovedAddresses extends Component{
       if(success){
         var newArray = [...this.state.approvedAddresses,this.state.newAddress]; // Creates new approved addresses array with the new address appended
         this.setState({approvedAddresses: newArray}); // Set the state to this new array to update the select drop-down
+
+        /*var newApprovedAddresses = await this.props.contract.methods.getApprovedAddresses(hashKey(this.props.getKey())).call({from:this.props.address });
+        this.setState({approvedAddresses: newApprovedAddresses }); */
       }
     }
     else{
@@ -362,9 +366,16 @@ class ApprovedAddresses extends Component{
 
   }
 
+  onRemoveAddress(event){
+    event.preventDefault();
+    console.log(event.target.value);
+    console.log(web3.utils.isAddress(event.target.value));
+  }
+
   render(){
     let addressList = this.state.approvedAddresses.length > 0 // If there is an approved address
-    && this.state.approvedAddresses.map((address) => { // Iterate through the approved addresses and map them to a select option for the drop-down
+    && this.state.approvedAddresses.map((address) => {
+      console.log("address: ", address.toString()); // Iterate through the approved addresses and map them to a select option for the drop-down
       return(
         <option key={address} value={address}>{address}</option>
       )
@@ -373,12 +384,15 @@ class ApprovedAddresses extends Component{
 
     return(
       <div>
-        <label>
-          Approved Addresses:
-        <select>
-          {addressList} 
-        </select>
-        </label>
+        <form onSubmit={this.onRemoveAddress}>
+          <label>
+            Approved Addresses:
+            <select>
+              {addressList} 
+            </select>
+            <input type="submit" value="Remove this address"></input>
+          </label>
+        </form>
         <br/>
         <form onSubmit={this.onAddAddress}>
         <label>

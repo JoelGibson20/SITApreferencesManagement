@@ -351,7 +351,10 @@ class ApprovedAddresses extends Component{
     console.log(web3.utils.isAddress(this.state.newAddress));
     if(web3.utils.isAddress(this.state.newAddress)){
       var success = await this.props.contract.methods.addApprovedAddress(this.state.newAddress,hashKey(this.props.getKey())).send({from: this.props.address});
-      console.log(success);
+      if(success){
+        var newArray = [...this.state.approvedAddresses,this.state.newAddress]; // Creates new approved addresses array with the new address appended
+        this.setState({approvedAddresses: newArray}); // Set the state to this new array to update the select drop-down
+      }
     }
     else{
       console.log("Not an address"); // !!! Want a pop-up here explaining address isn't valid

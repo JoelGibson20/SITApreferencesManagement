@@ -341,6 +341,7 @@ class ApprovedAddresses extends Component{
 
   updateApprovedAddresses(newApprovedAddresses){ // Updates approved addresses with a new list of approved addresses
     this.setState({approvedAddresses: newApprovedAddresses});
+    this.setState({selectedAddress: this.state.approvedAddresses[0]});
   }
 
   handleNewAddressChange(event){
@@ -360,11 +361,8 @@ class ApprovedAddresses extends Component{
     if(web3.utils.isAddress(this.state.newAddress)){
       var success = await this.props.contract.methods.addApprovedAddress(this.state.newAddress,hashKey(this.props.getKey())).send({from: this.props.address});
       if(success){
-        var newArray = [...this.state.approvedAddresses,this.state.newAddress]; // Creates new approved addresses array with the new address appended
-        this.setState({approvedAddresses: newArray}); // Set the state to this new array to update the select drop-down
-
-        /*var newApprovedAddresses = await this.props.contract.methods.getApprovedAddresses(hashKey(this.props.getKey())).call({from:this.props.address });
-        this.setState({approvedAddresses: newApprovedAddresses }); */
+        var newApprovedAddresses = await this.props.contract.methods.getApprovedAddresses(hashKey(this.props.getKey())).call({from:this.props.address });
+        this.setState({approvedAddresses: newApprovedAddresses }); 
       }
     }
     else{

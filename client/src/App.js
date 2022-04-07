@@ -371,10 +371,12 @@ class ApprovedAddresses extends Component{
 
   }
 
-  onRemoveAddress(event){
+  async onRemoveAddress(event){
     event.preventDefault();
     console.log(this.state.selectedAddress);
     console.log(web3.utils.isAddress(this.state.selectedAddress));
+    var success = await this.props.contract.methods.removeApprovedAddress(this.state.selectedAddress, hashKey(this.props.getKey())).send({from: this.props.address});
+    console.log("success: ", success);
   }
 
   render(){

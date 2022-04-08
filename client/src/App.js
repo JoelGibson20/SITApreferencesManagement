@@ -359,15 +359,21 @@ class ApprovedAddresses extends Component{
   async onAddAddress(event){
     event.preventDefault();
     console.log(web3.utils.isAddress(this.state.newAddress));
-    if((web3.utils.isAddress(this.state.newAddress)) && !(this.state.approvedAddresses.includes(this.state.newAddress))){
+    if((web3.utils.isAddress(this.state.newAddress)) && !(this.state.approvedAddresses.includes(this.state.newAddress)) && !(this.state.newAddress === this.props.address)){
       var success = await this.props.contract.methods.addApprovedAddress(this.state.newAddress,hashKey(this.props.getKey())).send({from: this.props.address});
       if(success){
         this.setState({newAddress: ''});
         this.getNewAddressList();
       }
     }
-    else if{
+    else if(!(web3.utils.isAddress(this.state.newAddress))){
       console.log("Not an address"); // !!! Want a pop-up here explaining address isn't valid
+    }
+    else if(this.state.newAddress === this.props.address){
+      console.log("Can't add your own address"); // !!! Want a pop-up here explaining address isn't valid
+    }
+    else if(this.state.approvedAddresses.includes(this.state.newAddress)){
+      console.log("Address already approved"); // !!! Want a pop-up here explaining address isn't valid
     }
 
   }

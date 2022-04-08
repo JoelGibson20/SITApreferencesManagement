@@ -170,9 +170,13 @@ class KeyManagement extends Component{
   }
 
   onGetNewKey(){
+    //var result = window.confirm("Remember to save your key before generating a new one!");
+    //console.log("result: ", result)
     // !!! Want to make a "Please save your current key so you don't forget it before proceeding"
-    this.setState({key: genKey()}, this.setStateKey );
-    this.props.setApprovedAddresses([]); // Resets the approved addresses field on creation of a new key
+    if (window.confirm("Remember to save your key before generating a new one!")){
+      this.setState({key: genKey()}, this.setStateKey );
+      this.props.setApprovedAddresses([]); // Resets the approved addresses field on creation of a new key
+    }
   }
 
   async onRetrievePreferences(event){
@@ -209,6 +213,7 @@ class KeyManagement extends Component{
         <input type="submit" value="Retrieve"></input>
       </form>
       <br/>
+      <button onClick={this.onGetNewKey}>Get New Key</button>
       <button onClick={this.onGetNewKey}>Get New Key</button>
       <button onClick={this.onDeletePreferences}>Delete These Preferences</button>
       </div>
@@ -425,6 +430,10 @@ class ApprovedAddresses extends Component{
       </div>
     );
   }
+}
+
+class Popup extends Component{
+
 }
 
 

@@ -48,7 +48,6 @@ contract SITApreferences2{
       if (!(keyInUse(msg.sender,key))){ 
         // If the key isn't already in use it needs to be added to the array in the usedKey mapping
         usedKeys[msg.sender].push(key);
-        addApprovedAddress(msg.sender, key); // Adds the user's address to approved addresses the first time a key is used.
       }
 
       bytes memory keyBytes = abi.encodePacked(key); // Convert string parameter for the secret key to bytes
@@ -60,7 +59,7 @@ contract SITApreferences2{
       // Attempts to retrieve preferences stored under the provided address + H(key) combination
       bytes memory keyBytes = abi.encodePacked(key); // Convert string parameter for the secret key to bytes
 
-      if(approvedAddressExists(userAddress, key, msg.sender)){
+      if( (msg.sender == userAddress) ||(approvedAddressExists(userAddress, key, msg.sender))){
         // Only addresses approved by the user are allowed to retrieve the encrypted preferences
         if(keyInUse(userAddress, key)){
           // Make sure the key is in use (and thus the preferences attempting to be retrieved exist)

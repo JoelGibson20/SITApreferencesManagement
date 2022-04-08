@@ -364,6 +364,7 @@ class ApprovedAddresses extends Component{
   handleNewAddressChange(event){
     event.preventDefault();
     this.setState({newAddress: event.target.value});
+    // event.target.setCustomValidity("Not a valid address"); // This only works in this handle change event
   }
 
   handleRemoveAddressChange(event){
@@ -406,6 +407,7 @@ class ApprovedAddresses extends Component{
   async getNewAddressList(){
     var newApprovedAddresses = await this.props.contract.methods.getApprovedAddresses(hashKey(this.props.getKey())).call({from:this.props.address });
     this.setState({approvedAddresses: newApprovedAddresses }); 
+    this.setState({selectedAddress: this.state.approvedAddresses[0]});
   }
 
   render(){

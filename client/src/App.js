@@ -170,10 +170,7 @@ class KeyManagement extends Component{
   }
 
   onGetNewKey(){
-    //var result = window.confirm("Remember to save your key before generating a new one!");
-    //console.log("result: ", result)
-    // !!! Want to make a "Please save your current key so you don't forget it before proceeding"
-    if (window.confirm("Remember to save your key before generating a new one!")){
+    if (window.confirm("Remember to save your key before generating a new one!")){ // Brings up a confirmation popup before generating a new key
       this.setState({key: genKey()}, this.setStateKey );
       this.props.setApprovedAddresses([]); // Resets the approved addresses field on creation of a new key
     }
@@ -181,15 +178,18 @@ class KeyManagement extends Component{
 
   async onRetrievePreferences(event){
     event.preventDefault();
-    var retrPref = await this.props.contract.methods.getPreferences(this.props.address, hashKey(this.state.key)).call({from: this.props.address}); // Attempts to retrieve preferences for this address + key combo
-    // !!! How to make pop-up appear when this returns an error to tell the user these preferences weren't found
-
-    var decPref = decryptPreferences(retrPref,this.state.key); // Decrypts the retrieved encrypted preferences
-    this.props.setPref(decPref); // Calls the method to update prefs in app state
-    
-    var approvedAddresses = await this.props.contract.methods.getApprovedAddresses(hashKey(this.state.key)).call({from:this.props.address });
-    // Get the approved addresses for this preferences set
-    this.props.setApprovedAddresses(approvedAddresses); // Calls the method to update the approved addresses in the ApprovedAddresses drop-down
+    try{
+      var retrPref = await this.props.contract.methods.getPreferences(this.props.address, hashKey(this.state.key)).call({from: this.props.address}); // Attempts to retrieve preferences for this address + key combo
+      var decPref = decryptPreferences(retrPref,this.state.key); // Decrypts the retrieved encrypted preferences
+      this.props.setPref(decPref); // Calls the method to update prefs in app state
+      
+      var approvedAddresses = await this.props.contract.methods.getApprovedAddresses(hashKey(this.state.key)).call({from:this.props.address });
+      // Get the approved addresses for this preferences set
+      this.props.setApprovedAddresses(approvedAddresses); // Calls the method to update the approved addresses in the ApprovedAddresses drop-down
+    }
+    catch{
+      window.alert("Preferences unable to be retrieved")
+    }
   }
 
   async onDeletePreferences(){

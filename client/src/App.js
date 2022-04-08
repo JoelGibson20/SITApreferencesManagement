@@ -66,6 +66,7 @@ class App extends Component {
 
   runExample = async () => { 
     const { accounts, contract } = this.state;
+    console.log(hashKey("fb9467f6b13f11d5f77af36b703344cd5bc45d2cdd507b051172e7e4d37fcb69"));
     
     //this.approvedAddressesRef.current.updateApprovedAddresses(["test1","test2","test3"]);
     /* var key = genKey();
@@ -358,14 +359,14 @@ class ApprovedAddresses extends Component{
   async onAddAddress(event){
     event.preventDefault();
     console.log(web3.utils.isAddress(this.state.newAddress));
-    if(web3.utils.isAddress(this.state.newAddress)){
+    if((web3.utils.isAddress(this.state.newAddress)) && !(this.state.approvedAddresses.includes(this.state.newAddress))){
       var success = await this.props.contract.methods.addApprovedAddress(this.state.newAddress,hashKey(this.props.getKey())).send({from: this.props.address});
       if(success){
         this.setState({newAddress: ''});
         this.getNewAddressList();
       }
     }
-    else{
+    else if{
       console.log("Not an address"); // !!! Want a pop-up here explaining address isn't valid
     }
 

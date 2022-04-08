@@ -276,7 +276,7 @@ class PreferencesForm extends Component{
     var key = this.props.getKey();
 
     if(key.length !== 64){ // Checks key is of right length, otherwise don't try and encrypt (encryption with wrong key length causes error)
-      console.log("Key wrong length"); // !!! Need to have this cause an alert or some message informing wrong key length
+      window.alert("Key wrong length, please use a valid key.");
     }
     else{
       var encPref = encryptPreferences(prefs,key);

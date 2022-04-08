@@ -170,7 +170,11 @@ class KeyManagement extends Component{
   }
 
   onGetNewKey(){
-    if (window.confirm("Remember to save your key before generating a new one!")){ // Brings up a confirmation popup before generating a new key
+    if(this.state.key.length === 0){ // Doesn't prompt you to save your key if there isn't one in the box
+      this.setState({key: genKey()}, this.setStateKey );
+      this.props.setApprovedAddresses([]); // Resets the approved addresses field on creation of a new key
+    }
+    else if (window.confirm("Remember to save your key before generating a new one!")){ // Brings up a confirmation popup before generating a new key, if the input box has something in it
       this.setState({key: genKey()}, this.setStateKey );
       this.props.setApprovedAddresses([]); // Resets the approved addresses field on creation of a new key
     }
@@ -265,7 +269,7 @@ class PreferencesForm extends Component{
     var key = this.props.getKey();
 
     if(key.length !== 64){ // Checks key is of right length, otherwise don't try and encrypt (encryption with wrong key length causes error)
-      console.log("Key wrong length"); // Need to have this cause an alert or some message informing wrong key length
+      console.log("Key wrong length"); // !!! Need to have this cause an alert or some message informing wrong key length
     }
     else{
       var encPref = encryptPreferences(prefs,key);

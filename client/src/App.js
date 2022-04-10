@@ -417,11 +417,13 @@ class ApprovedAddresses extends Component{
 
   async onRemoveAddress(event){
     event.preventDefault();
-    if(web3.utils.isAddress(this.state.selectedAddress)){
-      var success = await this.props.contract.methods.removeApprovedAddress(this.state.selectedAddress, hashKey(this.props.getKey())).send({from: this.props.address});
-      if(success){
-        this.getNewAddressList();
-        window.alert("Address removed successfully.");
+    if (window.confirm("Removing this address means they will no longer be able to retrieve these preferences. Are you sure you want to remove this approved address? ")){
+      if(web3.utils.isAddress(this.state.selectedAddress)){
+        var success = await this.props.contract.methods.removeApprovedAddress(this.state.selectedAddress, hashKey(this.props.getKey())).send({from: this.props.address});
+        if(success){
+          this.getNewAddressList();
+          window.alert("Address removed successfully.");
+        }
       }
     }
   }

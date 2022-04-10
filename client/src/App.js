@@ -381,6 +381,7 @@ class ApprovedAddresses extends Component{
         if(success){
           this.setState({newAddress: ''});
           this.getNewAddressList();
+          window.alert("Address added successfully.");
         }
       }
     }
@@ -396,19 +397,15 @@ class ApprovedAddresses extends Component{
     const newAddressInput = document.querySelector("[name=newAddressInput]");
 
     if(!(web3.utils.isAddress(this.state.newAddress))){
-      console.log("Not an address"); // !!! Want a pop-up here explaining address isn't valid
-      console.log("Address state = ", this.state.newAddress);
+      console.log("Not an address"); 
       newAddressInput.setCustomValidity("Not an address");
       
     }
     else if(this.state.newAddress === this.props.address){
-      console.log("Can't add your own address"); // !!! Want a pop-up here explaining address isn't valid
-      console.log("Address state = ", this.state.newAddress);
+      console.log("Can't add your own address");
       newAddressInput.setCustomValidity("Can't add your own address");
     }
     else if(this.state.approvedAddresses.includes(this.state.newAddress)){
-      console.log("Address already approved"); // !!! Want a pop-up here explaining address isn't valid
-      
       newAddressInput.setCustomValidity("Address already approved");
     }
     else{

@@ -174,7 +174,7 @@ class KeyManagement extends Component{
       this.setState({key: genKey()}, this.setStateKey );
       this.props.setApprovedAddresses([]); // Resets the approved addresses field on creation of a new key
     }
-    else if (window.confirm("Remember to save your key before generating a new one!")){ // Brings up a confirmation popup before generating a new key, if the input box has something in it
+    else if (window.confirm("Remember to save your key before generating a new one! Click cancel if you need to do this.")){ // Brings up a confirmation popup before generating a new key, if the input box has something in it
       this.setState({key: genKey()}, this.setStateKey );
       this.props.setApprovedAddresses([]); // Resets the approved addresses field on creation of a new key
     }
@@ -224,7 +224,6 @@ class KeyManagement extends Component{
         <input type="submit" value="Retrieve"></input>
       </form>
       <br/>
-      <button onClick={this.onGetNewKey}>Get New Key</button>
       <button onClick={this.onGetNewKey}>Get New Key</button>
       <button onClick={this.onDeletePreferences}>Delete These Preferences</button>
       </div>
@@ -417,8 +416,8 @@ class ApprovedAddresses extends Component{
 
   async onRemoveAddress(event){
     event.preventDefault();
-    if (window.confirm("Removing this address means they will no longer be able to retrieve these preferences. Are you sure you want to remove this approved address? ")){
-      if(web3.utils.isAddress(this.state.selectedAddress)){
+    if(web3.utils.isAddress(this.state.selectedAddress)){
+      if (window.confirm("Removing this address means they will no longer be able to retrieve these preferences. Are you sure you want to remove this approved address? ")){
         var success = await this.props.contract.methods.removeApprovedAddress(this.state.selectedAddress, hashKey(this.props.getKey())).send({from: this.props.address});
         if(success){
           this.getNewAddressList();

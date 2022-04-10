@@ -347,7 +347,7 @@ class PreferencesForm extends Component{
 class ApprovedAddresses extends Component{
   constructor(props){
     super(props);
-    this.state = {approvedAddresses: [], newAddress: '', selectedAddress: ''};
+    this.state = {approvedAddresses: [], newAddress: '', selectedAddress: '', addressError: ''};
 
     this.updateApprovedAddresses = this.updateApprovedAddresses.bind(this);
     this.handleNewAddressChange = this.handleNewAddressChange.bind(this);
@@ -363,8 +363,7 @@ class ApprovedAddresses extends Component{
 
   handleNewAddressChange(event){
     event.preventDefault();
-    this.setState({newAddress: event.target.value});
-    // event.target.setCustomValidity("Not a valid address"); // This only works in this handle change event
+    this.setState({newAddress: event.target.value}, this.newAddressError);
   }
 
   handleRemoveAddressChange(event){
@@ -375,6 +374,7 @@ class ApprovedAddresses extends Component{
 
   async onAddAddress(event){
     event.preventDefault();
+
     console.log(web3.utils.isAddress(this.state.newAddress));
     if((web3.utils.isAddress(this.state.newAddress)) && !(this.state.approvedAddresses.includes(this.state.newAddress)) && !(this.state.newAddress === this.props.address)){
       var success = await this.props.contract.methods.addApprovedAddress(this.state.newAddress,hashKey(this.props.getKey())).send({from: this.props.address});
@@ -383,14 +383,31 @@ class ApprovedAddresses extends Component{
         this.getNewAddressList();
       }
     }
-    else if(!(web3.utils.isAddress(this.state.newAddress))){
+  }
+
+
+  newAddressError(){
+    const newAddressInput = document.querySelector("[name=newAddressInput]");
+
+    if(!(web3.utils.isAddress(this.state.newAddress))){
       console.log("Not an address"); // !!! Want a pop-up here explaining address isn't valid
+      console.log("Address state = ", this.state.newAddress);
+      newAddressInput.setCustomValidity("Not an address");
+      
     }
     else if(this.state.newAddress === this.props.address){
       console.log("Can't add your own address"); // !!! Want a pop-up here explaining address isn't valid
+      console.log("Address state = ", this.state.newAddress);
+      newAddressInput.setCustomValidity("Can't add your own address");
     }
     else if(this.state.approvedAddresses.includes(this.state.newAddress)){
       console.log("Address already approved"); // !!! Want a pop-up here explaining address isn't valid
+      
+      newAddressInput.setCustomValidity("Address already approved");
+    }
+    else{
+      console.log("no problems")
+      newAddressInput.setCustomValidity("");
     }
 
   }
@@ -439,7 +456,7 @@ class ApprovedAddresses extends Component{
           Add an Approved Address:
           <input type="text" value={this.state.newAddress} onChange={this.handleNewAddressChange}/>
         </label>
-        <input type="submit" value="Add new address"></input>
+        <input type="submit" id="newAddressInput" name="newAddressInput" value="Add new address"></input>
       </form>
 
       </div>

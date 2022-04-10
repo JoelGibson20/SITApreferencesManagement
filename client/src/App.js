@@ -374,15 +374,21 @@ class ApprovedAddresses extends Component{
 
   async onAddAddress(event){
     event.preventDefault();
-
-    console.log(web3.utils.isAddress(this.state.newAddress));
-    if((web3.utils.isAddress(this.state.newAddress)) && !(this.state.approvedAddresses.includes(this.state.newAddress)) && !(this.state.newAddress === this.props.address)){
-      var success = await this.props.contract.methods.addApprovedAddress(this.state.newAddress,hashKey(this.props.getKey())).send({from: this.props.address});
-      if(success){
-        this.setState({newAddress: ''});
-        this.getNewAddressList();
+    try{
+      var retrPref = await this.props.contract.methods.getPreferences(this.props.address, hashKey(this.props.getKey())).call({from: this.props.address}); // Attempts to retrieve preferences for this address + key combo to see if there's anything to delete
+      if((web3.utils.isAddress(this.state.newAddress)) && !(this.state.approvedAddresses.includes(this.state.newAddress)) && !(this.state.newAddress === this.props.address)){
+        var success = await this.props.contract.methods.addApprovedAddress(this.state.newAddress,hashKey(this.props.getKey())).send({from: this.props.address});
+        if(success){
+          this.setState({newAddress: ''});
+          this.getNewAddressList();
+        }
       }
     }
+  
+    catch{
+      window.alert("No preferences found for this key, please set some preferences before adding approved addresses.");
+    }
+    
   }
 
 

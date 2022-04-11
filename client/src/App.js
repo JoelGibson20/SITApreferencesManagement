@@ -180,17 +180,22 @@ class KeyManagement extends Component{
 
   async onDeletePreferences(){
     if(window.confirm("Are you sure you want to delete these preferences?")){
-      try{
-        var retrPref = await this.props.contract.methods.getPreferences(this.props.address, hashKey(this.state.key)).call({from: this.props.address}); // Attempts to retrieve preferences for this address + key combo to see if there's anything to delete
-        var success = await this.props.contract.methods.deletePreferences(hashKey(this.state.key)).send({from: this.props.address});
-        if(success){
-          this.setState({key: ''}, this.setStateKey); // Clears secret key input after preferences deleted
-          this.props.setPref('0000'); // Resets preference form back to default
-          window.alert("Preferences deleted successfully."); // Informs the user preferences were deleted
+      if(this.keyError()){
+        window.alert("Invalid key. Please enter a valid key.")
       }
-    }
-      catch{
-        window.alert("No preferences found for this key, nothing to delete.");
+      else{
+        try{
+          var retrPref = await this.props.contract.methods.getPreferences(this.props.address, hashKey(this.state.key)).call({from: this.props.address}); // Attempts to retrieve preferences for this address + key combo to see if there's anything to delete
+          var success = await this.props.contract.methods.deletePreferences(hashKey(this.state.key)).send({from: this.props.address});
+          if(success){
+            this.setState({key: ''}, this.setStateKey); // Clears secret key input after preferences deleted
+            this.props.setPref('0000'); // Resets preference form back to default
+            window.alert("Preferences deleted successfully."); // Informs the user preferences were deleted
+          }
+        }
+        catch{
+          window.alert("No preferences found for this key, nothing to delete.");
+        }
       }
     }
   }

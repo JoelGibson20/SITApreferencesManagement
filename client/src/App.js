@@ -36,6 +36,7 @@ class App extends Component {
 
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
+      console.log("networkId = ", networkId);
       const deployedNetwork = SITAPreferencesContract.networks[networkId];
       const instance = new web3.eth.Contract(
         SITAPreferencesContract.abi,
@@ -43,18 +44,10 @@ class App extends Component {
       );
 
       var account = web3.currentProvider.selectedAddress;
-      console.log("test:", account);
-/*       web3.eth.getCoinbase(function(err,account){
-        if(err === null){
-          console.log("account: ", account);
-          this.setState({address: account});
-        }
-      });
-       */
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
-      this.setState({ web3, accounts, contract: instance, address: account}, this.runExample); // runExample is run here
+      this.setState({ web3, accounts, contract: instance, address: account}); // runExample is run here
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -62,31 +55,17 @@ class App extends Component {
       );
       console.error(error);
     }
-  };
+    
+    if(window.ethereum) {
+      window.ethereum.on('accountsChanged', function () { // Refreshes page on account change
+            window.location.reload(true);
+          });
+      window.ethereum.on('chainChanged', () => { // Refreshes page on network change
+        window.location.reload(true);
+       });
+      }
+  }
 
-  runExample = async () => { 
-    const { accounts, contract } = this.state;
-    console.log(hashKey("fb9467f6b13f11d5f77af36b703344cd5bc45d2cdd507b051172e7e4d37fcb69"));
-    
-    //this.approvedAddressesRef.current.updateApprovedAddresses(["test1","test2","test3"]);
-    /* var key = genKey();
-    console.log("key: ", key);
-    //var key = this.state.key; // Generates an AES key (returned in hexadecimal)
-    var encPref = encryptPreferences("Hello testing test testing yes", key); //Encrypts text using AES-256 (used to encrypt SITA preferences string eg: "1234")
-    console.log("encPref = ", encPref);
-    await contract.methods.setPreferences(encPref,hashKey(key)).send({from: this.state.address}); // Stores encrypted preferences (as hex string) in the contract
-    var retrPref = await contract.methods.getPreferences(this.state.address,hashKey(key)).call({from: this.state.address}); // Retrieves the encrypted preferences hex string from the contract
-    console.log("retrPref = ", retrPref);
-    console.log(decryptPreferences(retrPref,key)); // Decrypts the preferences  */
-    
-    /*
-    // Stores a given value, 5 by default.
-    await contract.methods.set(5).send({ from: accounts[0] });
-    // Get the value from the contract to prove it worked.
-    const response = await contract.methods.get().call();
-    // Update state with the result.
-    this.setState({ storageValue: response }); */ 
-  };
 
   setKey(newKey){
     //console.log("Key received: ",newKey);
@@ -114,10 +93,9 @@ class App extends Component {
     this.approvedAddressesRef.current.updateApprovedAddresses(newApprovedAddresses);
   }
 
-
   render() {
     if (!this.state.web3) {
-      return <div>Loading Web3, accounts, and contract...</div>;
+      return <div>Loading Web3, accounts, and contract. If you haven't already, please log in to your account using the MetaMask extension.</div>;
     }
     return (
       <div className="App">
@@ -223,7 +201,7 @@ class KeyManagement extends Component{
         </label>
         <input type="submit" value="Retrieve"></input>
       </form>
-      <br/>
+     
       <button onClick={this.onGetNewKey}>Get New Key</button>
       <button onClick={this.onDeletePreferences}>Delete These Preferences</button>
       </div>
@@ -288,6 +266,7 @@ class PreferencesForm extends Component{
     return(
         <div>
           <label>
+            <br/>
             Define Your Preferences
               <form onSubmit={this.onSubmit}>
                 <label>
@@ -336,6 +315,7 @@ class PreferencesForm extends Component{
                 <br/>
                 <input type="submit" value="Submit" />
               </form>
+              <br/>
           </label>
         </div>
     );
@@ -454,7 +434,7 @@ class ApprovedAddresses extends Component{
             <input type="submit" value="Remove this address"></input>
           </label>
         </form>
-        <br/>
+        
         <form onSubmit={this.onAddAddress}>
         <label>
           Add an Approved Address:
@@ -462,7 +442,6 @@ class ApprovedAddresses extends Component{
         </label>
         <input type="submit" id="newAddressInput" name="newAddressInput" value="Add new address"></input>
       </form>
-
       </div>
     );
   }

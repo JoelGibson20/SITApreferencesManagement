@@ -288,9 +288,13 @@ class PreferencesForm extends Component{
     var prefs =  this.state.spatial + this.state.identity + this.state.temporal + this.state.activity; // Combines the dimensions into 1 string
     console.log("prefs: ", prefs);
     var key = this.props.getKey();
+    var re = /[0-9A-Fa-f]{64}/g; // Hexadecimal regex expression
 
     if(key.length !== 64){ // Checks key is of right length, otherwise don't try and encrypt (encryption with wrong key length causes error)
       window.alert("Key wrong length, please use a valid key.");
+    }
+    else if(!re.test(key)){
+      window.alert("Key must be hexadecimal, please use a valid key.")
     }
     else{
       var encPref = encryptPreferences(prefs,key);

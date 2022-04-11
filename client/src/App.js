@@ -173,7 +173,7 @@ class KeyManagement extends Component{
         window.alert("Preferences successfully retrieved")
       }
       catch{
-        window.alert("Preferences unable to be retrieved")
+        window.alert("Preferences unable to be retrieved, key not in use.")
       }
   }
   }

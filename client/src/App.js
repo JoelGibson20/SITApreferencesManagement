@@ -140,6 +140,7 @@ class KeyManagement extends Component{
 
   setStateKey(){
     this.props.setKey(this.state.key);
+    this.keyError();
   }
 
   handleChange(event){
@@ -160,7 +161,7 @@ class KeyManagement extends Component{
 
   async onRetrievePreferences(event){
     event.preventDefault();
-    if (!this.keyError()){
+    //if (!this.keyError()){
       try{
         var retrPref = await this.props.contract.methods.getPreferences(this.props.address, hashKey(this.state.key)).call({from: this.props.address}); // Attempts to retrieve preferences for this address + key combo
         var decPref = decryptPreferences(retrPref,this.state.key); // Decrypts the retrieved encrypted preferences
@@ -173,7 +174,7 @@ class KeyManagement extends Component{
       catch{
         window.alert("Preferences unable to be retrieved")
       }
-  }
+  //}
   }
 
   async onDeletePreferences(){
@@ -195,23 +196,28 @@ class KeyManagement extends Component{
 
   keyError(){
     const keyInput = document.querySelector("[name=keyInput]");
-    var re = /[0-9A-Fa-f]{6}/g;
+    var re = /[0-9A-Fa-f]{64}/g; // Hexadecimal regex expression
 
     if(this.state.key.length === 0){
       console.log("key can't be empty")
-      return(true);
+      keyInput.setCustomValidity("Key can't be blank");
+      //return(true);
     }
     else if(this.state.key.length > 64 || this.state.key.length < 64 ){
       console.log("key must be 64 characters long")
-      return(true);
+      keyInput.setCustomValidity("Key must be 64 characters long");
+      //return(true);
     }
-    else if(re.test(this.state.key)){
+    else if(!re.test(this.state.key)){
       console.log("not hexadecimal");
-      return(true);
+      keyInput.setCustomValidity("Key must be hexadecimal");
+      //return(true);
     }
     else{
-      return(false);
+      keyInput.setCustomValidity("");
+      //return(false);
     }
+    
 
 
   }

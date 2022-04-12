@@ -17,8 +17,8 @@
 #yourAccount{
   text-align: center;
   padding: 8px;
-  background-color: white;
-  border: 2px solid black;
+  background-color: aquamarine;
+  /*border: 2px solid black;*/
   border-radius: 8px;
   /*box-shadow: 2px 4px green;*/
 }
@@ -28,3 +28,26 @@
   padding: 5px;
   
 }
+
+button{
+   display:inline-block;
+   padding:0.3em 1.2em;
+   margin:0 0.1em 0.1em 0;
+   border:0.16em solid rgba(255,255,255,0);
+   border-radius:2em;
+   background-color: aquamarine;
+   box-sizing: border-box;
+   text-decoration:none;
+   font-family:'Roboto',sans-serif;
+   font-weight:300;
+   color:Black;
+   text-shadow: 0 0.04em 0.04em rgba(0,0,0,0.35);
+   text-align:center;
+   transition: all 0.2s;
+  }
+  button:hover{
+   border-color: rgba(255,255,255,1);
+  }
+
+  
+

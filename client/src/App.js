@@ -123,7 +123,7 @@ class YourAccount extends Component{
     const address = this.props.address;
 		return(
       <div id="yourAccountDiv">
-			  <p id="yourAccount"> Your Account: {address} </p>
+			  <p id="yourAccount"> <b>Your Account:</b> {address} </p>
       </div>	
 		);
 	}

@@ -4,4 +4,23 @@
 
 .TopBar{
   background-color: #09d3ac;
+  width: 100%;
+  height: fit-content;
+  float:left;
+}
+
+#yourAccountDiv{
+  float:left;
+  padding: 5px;
+  
+}
+
+#yourAccount{
+  text-align: center;
+}
+
+#keyManagementDiv{
+  float:right;
+  padding: 5px;
+  
 }

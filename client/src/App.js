@@ -100,9 +100,10 @@ class App extends Component {
     return (
       <div className="App">
         <div className="TopBar">
-        <YourAccount address = {this.state.address}/>
-        <KeyManagement setKey = {this.setKey} setPref = {this.setPref} setApprovedAddresses = {this.setApprovedAddresses} address = {this.state.address} contract = {this.state.contract} />
+          <YourAccount address = {this.state.address}/>
+          <KeyManagement setKey = {this.setKey} setPref = {this.setPref} setApprovedAddresses = {this.setApprovedAddresses} address = {this.state.address} contract = {this.state.contract} />
         </div>
+        <br/>
         <div className="Body">
           <PreferencesForm ref = {this.preferencesFormRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey}/>
           <ApprovedAddresses ref = {this.approvedAddressesRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} />
@@ -120,8 +121,10 @@ class YourAccount extends Component{
 	
 	render(){
     const address = this.props.address;
-		return(	
-			<p> Your Account: {address} </p>
+		return(
+      <div id="yourAccountDiv">
+			  <p id="yourAccount"> Your Account: {address} </p>
+      </div>	
 		);
 	}
 }
@@ -223,14 +226,11 @@ class KeyManagement extends Component{
       keyInput.setCustomValidity("");
       return(false);
     }
-    
-
-
   }
 
   render(){
     return(
-      <div>
+      <div id="keyManagementDiv">
       <form onSubmit={this.onRetrievePreferences}>
         <label>
           Secret Key:

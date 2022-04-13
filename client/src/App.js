@@ -3,8 +3,10 @@ import getWeb3 from "./getWeb3";
 import SITAPreferencesContract from "./contracts/SITApreferences2.json";
 import {encryptPreferences, decryptPreferences, genKey, hashKey} from "./crypto-methods";
 import web3 from "web3";
+import {Container, Button, Navbar} from 'react-bootstrap/';
 
 import "./App.css";
+import "./bootstrap.min.css"
 
 class App extends Component {
   constructor(props){
@@ -99,14 +101,21 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <div className="TopBar">
+        <Navbar bg="dark" variant="dark"  expand="lg">
+          <Container>
           <YourAccount address = {this.state.address}/>
           <KeyManagement setKey = {this.setKey} setPref = {this.setPref} setApprovedAddresses = {this.setApprovedAddresses} address = {this.state.address} contract = {this.state.contract} />
-        </div>
+          </Container>
+        </Navbar>
         <br/>
-        <div className="Body">
-          <PreferencesForm ref = {this.preferencesFormRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey}/>
-          <ApprovedAddresses ref = {this.approvedAddressesRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} />
+        <div class="container" className="Body">
+          <div class="row">
+            <div class="col-sm-8"><PreferencesForm ref = {this.preferencesFormRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey}/>
+            </div>
+            <div class="col-sm-4">
+            <ApprovedAddresses ref = {this.approvedAddressesRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} />
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -239,8 +248,8 @@ class KeyManagement extends Component{
         <input type="submit" value="Retrieve"></input>
       </form>
      
-      <button onClick={this.onGetNewKey}>Get New Key</button>
-      <button onClick={this.onDeletePreferences}>Delete These Preferences</button>
+      <Button onClick={this.onGetNewKey}>Get New Key</Button>
+      <Button onClick={this.onDeletePreferences}>Delete These Preferences</Button>
       </div>
     );
   }
@@ -307,7 +316,6 @@ class PreferencesForm extends Component{
     return(
         <div>
           <label>
-            <br/>
             Define Your Preferences
               <form onSubmit={this.onSubmit}>
                 <label>
@@ -356,7 +364,6 @@ class PreferencesForm extends Component{
                 <br/>
                 <input type="submit" value="Submit" />
               </form>
-              <br/>
           </label>
         </div>
     );

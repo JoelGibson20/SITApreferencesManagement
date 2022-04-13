@@ -3,7 +3,7 @@ import getWeb3 from "./getWeb3";
 import SITAPreferencesContract from "./contracts/SITApreferences2.json";
 import {encryptPreferences, decryptPreferences, genKey, hashKey} from "./crypto-methods";
 import web3 from "web3";
-import {Container, Button, Navbar} from 'react-bootstrap/';
+import {Container, Button, Navbar, ButtonGroup} from 'react-bootstrap/';
 
 import "./App.css";
 import "./bootstrap.min.css"
@@ -101,7 +101,7 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <Navbar bg="dark" variant="dark"  expand="lg">
+        <Navbar bg="dark" variant="light"  expand="lg">
           <Container>
           <YourAccount address = {this.state.address}/>
           <KeyManagement setKey = {this.setKey} setPref = {this.setPref} setApprovedAddresses = {this.setApprovedAddresses} address = {this.state.address} contract = {this.state.contract} />
@@ -131,9 +131,11 @@ class YourAccount extends Component{
 	render(){
     const address = this.props.address;
 		return(
+      <Container id="yourAccountContainer">
       <div id="yourAccountDiv">
 			  <p id="yourAccount"> <b>Your Account:</b> {address} </p>
-      </div>	
+      </div>
+      </Container>	
 		);
 	}
 }
@@ -239,6 +241,7 @@ class KeyManagement extends Component{
 
   render(){
     return(
+      <Container>
       <div id="keyManagementDiv">
       <form onSubmit={this.onRetrievePreferences}>
         <label>
@@ -247,10 +250,12 @@ class KeyManagement extends Component{
         </label>
         <input type="submit" value="Retrieve"></input>
       </form>
-     
-      <Button onClick={this.onGetNewKey}>Get New Key</Button>
-      <Button onClick={this.onDeletePreferences}>Delete These Preferences</Button>
+      <ButtonGroup>
+        <Button variant="primary" onClick={this.onGetNewKey}>Get New Key</Button>
+        <Button variant="danger" onClick={this.onDeletePreferences}>Delete These Preferences</Button>
+      </ButtonGroup>
       </div>
+      </Container>
     );
   }
 }

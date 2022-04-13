@@ -488,9 +488,6 @@ class ApprovedAddresses extends Component{
   }
 }
 
-class Popup extends Component{
-
-}
 
 
 export default App;

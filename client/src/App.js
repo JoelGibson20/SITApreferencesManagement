@@ -108,15 +108,16 @@ class App extends Component {
           </Container>
         </Navbar>
         <br/>
-        <div class="container" className="Body">
-          <div class="row">
-            <div class="col-sm-8"><PreferencesForm ref = {this.preferencesFormRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey}/>
-            </div>
-            <div class="col-sm-4">
+        <Container classname="body">
+          <Row>
+            <Col xs="8"> 
+           <PreferencesForm ref = {this.preferencesFormRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey}/>
+           </Col>
+           <Col>
             <ApprovedAddresses ref = {this.approvedAddressesRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} />
-            </div>
-          </div>
-        </div>
+          </Col>
+          </Row>
+       </Container>   
       </div>
     );
   }
@@ -330,58 +331,61 @@ class PreferencesForm extends Component{
 
   render(){
     return(
-        <div>
-          <label>
-            Define Your Preferences
-              <form onSubmit={this.onSubmit}>
+      <Container>
+            <h3>Define Your Preferences</h3>
+              <Form onSubmit={this.onSubmit}>
                 <label>
                   Spatial:
-                  <select id="spatial" value={this.state.spatial} onChange={this.handleChange}>
+                  </label>
+                  <Form.Control as="select" id="spatial" value={this.state.spatial} onChange={this.handleChange}>
                     <option value="0">0. No Information</option>
                     <option value="1">1. Aggregation</option>
                     <option value="2">2. Obfuscation</option>
                     <option value="3">3. Regulation</option>
                     <option value="4">4. Full Information</option>
-                  </select>
-                </label>
-                <br/>
+                  </Form.Control>
+                
+                
                 <label>
                   Identity:
-                  <select id="identity" value={this.state.identity} onChange={this.handleChange}>
+                  </label>
+                  <Form.Control as="select" id="identity" value={this.state.identity} onChange={this.handleChange}>
                     <option value="0">0. No Information</option>
                     <option value="1">1. Aggregation</option>
                     <option value="2">2. Obfuscation</option>
                     <option value="3">3. Regulation</option>
                     <option value="4">4. Full Information</option>
-                  </select>
-                </label>
-                <br/>
+                  </Form.Control>
+              
+                
                 <label>
                   Temporal:
-                  <select id="temporal" value={this.state.temporal} onChange={this.handleChange}>
+                </label>
+                  <Form.Control as="select" id="temporal" value={this.state.temporal} onChange={this.handleChange}>
                     <option value="0">0. No Information</option>
                     <option value="1">1. Aggregation</option>
                     <option value="2">2. Obfuscation</option>
                     <option value="3">3. Regulation</option>
                     <option value="4">4. Full Information</option>
-                  </select>
-                </label>
-                <br/>
+                  </Form.Control>
+      
+                
                 <label>
                   Activity:
-                  <select id="activity" value={this.state.activity} onChange={this.handleChange}>
+                </label>
+                  <Form.Control as="select" id="activity" value={this.state.activity} onChange={this.handleChange}>
                     <option value="0">0. No Information</option>
                     <option value="1">1. Aggregation</option>
                     <option value="2">2. Obfuscation</option>
                     <option value="3">3. Regulation</option>
                     <option value="4">4. Full Information</option>
-                  </select>
-                </label>
-                <br/>
-                <input type="submit" value="Submit" />
-              </form>
-          </label>
-        </div>
+                  </Form.Control>
+
+                <Button size="lg" variant="primary" type="submit">
+                    Submit
+                </Button>
+              </Form>
+      </Container>
     );
   }
 

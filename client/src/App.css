@@ -27,7 +27,11 @@
   float:right;
   padding: 5px;
   background-color: white;
+  border-radius: 8px;
   
 }
 
+.navbar-colour{
+  background-color: rgb(105, 162, 255);
+}
 

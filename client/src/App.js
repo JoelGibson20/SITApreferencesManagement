@@ -492,25 +492,32 @@ class ApprovedAddresses extends Component{
     }, this);
 
     return(
-      <div>
-        <form onSubmit={this.onRemoveAddress}>
+      <Container>
+        <h4>Approved Addresses</h4>
+        <Form onSubmit={this.onRemoveAddress}>
           <label>
             Approved Addresses:
-            <select id="approvedAddressSelect" value={this.state.selectedAddress} onChange={this.handleRemoveAddressChange}>
-              {addressList} 
-            </select>
-            <input type="submit" value="Remove this address"></input>
+            <Form.Control as="select" size="sm"  id="approvedAddressSelect" value={this.state.selectedAddress} onChange={this.handleRemoveAddressChange}>
+              {addressList}
+              </Form.Control>
+              <Button size="lg" variant="danger" type="submit">
+                    Remove this address
+                </Button>
           </label>
-        </form>
+        </Form>
         
-        <form onSubmit={this.onAddAddress}>
+        <Form onSubmit={this.onAddAddress}>
         <label>
           Add an Approved Address:
-          <input type="text" value={this.state.newAddress} onChange={this.handleNewAddressChange}/>
+          <Form.Control type="text" size="sm" placeholder="Enter new address to approve" value={this.state.newAddress} onChange={this.handleNewAddressChange}></Form.Control>
+        
+      
+          <Button size="lg" variant="primary" type="submit">
+                    Add new address
+          </Button>
         </label>
-        <input type="submit" id="newAddressInput" name="newAddressInput" value="Add new address"></input>
-      </form>
-      </div>
+      </Form>
+      </Container>
     );
   }
 }

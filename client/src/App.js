@@ -3,7 +3,7 @@ import getWeb3 from "./getWeb3";
 import SITAPreferencesContract from "./contracts/SITApreferences2.json";
 import {encryptPreferences, decryptPreferences, genKey, hashKey} from "./crypto-methods";
 import web3 from "web3";
-import {Container, Button, Navbar, ButtonGroup, Row, Col} from 'react-bootstrap/';
+import {Container, Button, Navbar, Form, Row, Col} from 'react-bootstrap/';
 
 import "./App.css";
 import "./bootstrap.min.css"
@@ -243,7 +243,7 @@ class KeyManagement extends Component{
     return(
       <Container id="keyManagementDiv">
         
-      <form onSubmit={this.onRetrievePreferences}>
+      <Form onSubmit={this.onRetrievePreferences}>
         <Row>
           <label>
             <h3>Secret Key:</h3>
@@ -251,18 +251,20 @@ class KeyManagement extends Component{
         </Row>
         <Row>
           <Col>
-          <input type="text" id="keyInput" name="keyInput" value={this.state.key} onChange={this.handleChange}/>
+          <Form.Control type="text" placeholder="Enter your secret key" id="keyInput" name="keyInput" value={this.state.key} onChange={this.handleChange} />
           </Col>
         
         <Col>
-        <input type="submit" value="Retrieve"></input>
+        <Button variant="primary" type="submit">
+          Retrieve
+        </Button>
         </Col>
         </Row>
-      </form>
+      </Form>
         
       <Row>
-      <Col><Button variant="primary" onClick={this.onGetNewKey}>Get New Key</Button></Col>
-      <Col><Button variant="danger" onClick={this.onDeletePreferences}>Delete These Preferences</Button></Col>
+        <Col><Button variant="primary" onClick={this.onGetNewKey}>Get New Key</Button></Col>
+        <Col><Button variant="danger" onClick={this.onDeletePreferences}>Delete These Preferences</Button></Col>
       </Row>
       </Container>
     );

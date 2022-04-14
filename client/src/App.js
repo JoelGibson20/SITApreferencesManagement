@@ -246,26 +246,26 @@ class KeyManagement extends Component{
       <Form onSubmit={this.onRetrievePreferences}>
         <Row>
           <label>
-            <h3>Secret Key:</h3>
+            <h4>Secret Key:</h4>
             </label>
         </Row>
         <Row>
           <Col>
-          <Form.Control type="text" placeholder="Enter your secret key" id="keyInput" name="keyInput" value={this.state.key} onChange={this.handleChange} />
+          <Form.Control className="keyInput" type="text" size="sm" placeholder="Enter your secret key" id="keyInput" name="keyInput" value={this.state.key} onChange={this.handleChange} />
           </Col>
+        </Row>
         
-        <Col>
-        <Button variant="primary" type="submit">
+        <Row className="test"> 
+        <Col><Button size="sm" variant="danger" onClick={this.onDeletePreferences}>Delete These Preferences</Button></Col>
+        <Col><Button size="sm" variant="primary" onClick={this.onGetNewKey}>Get New Key</Button></Col>
+        <Col><Button size="sm" variant="primary" type="submit">
           Retrieve
         </Button>
         </Col>
+        
         </Row>
       </Form>
         
-      <Row>
-        <Col><Button variant="primary" onClick={this.onGetNewKey}>Get New Key</Button></Col>
-        <Col><Button variant="danger" onClick={this.onDeletePreferences}>Delete These Preferences</Button></Col>
-      </Row>
       </Container>
     );
   }

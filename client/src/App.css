@@ -17,7 +17,7 @@
 #yourAccount{
   text-align: center;
   padding: 8px;
-  background-color:white;
+  background-color:rgb(105, 162, 255);
   /*border: 2px solid black;*/
   border-radius: 8px;
   /*box-shadow: 2px 4px green;*/
@@ -26,9 +26,14 @@
 #keyManagementDiv{
   float:right;
   padding: 5px;
-  background-color: white;
+  background-color: rgb(105, 162, 255);
   border-radius: 8px;
+  width:90%;
   
+}
+
+.test{
+  padding:10px;
 }
 
 .navbar-colour{

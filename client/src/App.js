@@ -120,7 +120,7 @@ class App extends Component {
         <Container classname="body">
           <Row>
             <Col xs="8"> 
-           <PreferencesForm ref = {this.preferencesFormRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey}/>
+           <PreferencesForm ref = {this.preferencesFormRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} showModal={this.showModal} closeModal={this.closeModal}/>
            </Col>
            <Col>
             <ApprovedAddresses ref = {this.approvedAddressesRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} />
@@ -230,7 +230,7 @@ class KeyManagement extends Component{
         try{
           var retrPref = await this.props.contract.methods.getPreferences(this.props.address, hashKey(this.state.key)).call({from: this.props.address}); // Attempts to retrieve preferences for this address + key combo to see if there's anything to delete
           var success = await this.props.contract.methods.deletePreferences(hashKey(this.state.key)).send({from: this.props.address});
-          
+
           if(success){
             this.setState({key: ''}, this.setStateKey); // Clears secret key input after preferences deleted
             this.props.setPref('0000'); // Resets preference form back to default
@@ -313,8 +313,6 @@ class PreferencesForm extends Component{
       this.handleChange = this.handleChange.bind(this);
       this.onSubmit = this.onSubmit.bind(this);
       this.updatePrefs = this.updatePrefs.bind(this);
-      this.closeModal = this.closeModal.bind(this);
-      this.showModal = this.showModal.bind(this);
 
   }
 
@@ -351,26 +349,20 @@ class PreferencesForm extends Component{
     var re = /[0-9A-Fa-f]{64}/g; // Hexadecimal regex expression
 
     if(key.length !== 64){ // Checks key is of right length, otherwise don't try and encrypt (encryption with wrong key length causes error)
-      this.showModal(false, "Failure!", "Key is the wrong length, please use a valid key.", "OK", this.closeModal)
+      this.props.showModal(false, "Failure!", "Key is the wrong length, please use a valid key.", "OK", this.props.closeModal)
     }
     else if(!re.test(key)){
-      this.showModal(false, "Failure!", "Key must be hexadecimal, please use a valid key.", "OK", this.closeModal)
+      this.props.showModal(false, "Failure!", "Key must be hexadecimal, please use a valid key.", "OK", this.props.closeModal)
     }
     else{
       var encPref = encryptPreferences(prefs,key);
       console.log("encPref: ", encPref);
-      await this.props.contract.methods.setPreferences(encPref,hashKey(this.props.getKey())).send({from: this.props.address});
+      var success = await this.props.contract.methods.setPreferences(encPref,hashKey(this.props.getKey())).send({from: this.props.address});
+      if (success){
+        this.props.showModal(false, "Success!", "Preferences stored under this key.", "OK", this.props.closeModal)
+      }
     }
   }
-
-  closeModal(){
-    this.setState({modalShow: false});
-  }
-
-  showModal(cancel, title, body, okMessage, okFunction){
-    this.setState({cancelNeeded: cancel, modalTitle: title, modalBody: body, modalShow: true, modalOkMessage: okMessage, modalOkFunction: okFunction});
-  }
-
 
   render(){
     return(
@@ -428,23 +420,6 @@ class PreferencesForm extends Component{
                     Submit
                 </Button>
               </Form>
-
-      <Modal show={this.state.modalShow} backdrop="static" keyboard={false}>
-        <Modal.Header>
-          <Modal.Title>{this.state.modalTitle}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{this.state.modalBody}</Modal.Body>
-        <Modal.Footer>
-          {this.state.cancelNeeded == true &&
-           <Button variant="secondary" onClick={this.closeModal}>
-            Cancel
-         </Button>
-          }
-          <Button variant="primary" onClick={this.state.modalOkFunction}>
-           {this.state.modalOkMessage}
-          </Button>
-        </Modal.Footer>
-      </Modal>
       </Container>
     );
   }

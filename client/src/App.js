@@ -230,10 +230,11 @@ class KeyManagement extends Component{
         try{
           var retrPref = await this.props.contract.methods.getPreferences(this.props.address, hashKey(this.state.key)).call({from: this.props.address}); // Attempts to retrieve preferences for this address + key combo to see if there's anything to delete
           var success = await this.props.contract.methods.deletePreferences(hashKey(this.state.key)).send({from: this.props.address});
+          
           if(success){
             this.setState({key: ''}, this.setStateKey); // Clears secret key input after preferences deleted
             this.props.setPref('0000'); // Resets preference form back to default
-            this.props.props.showModal(false, "Success!", "Preferences deleted successfully.", "OK", this.props.closeModal);
+            this.props.showModal(false, "Success!", "Preferences deleted successfully.", "OK", this.props.closeModal);
           }
         }
         catch{

@@ -179,6 +179,7 @@ class KeyManagement extends Component{
     this.onDeletePreferences= this.onDeletePreferences.bind(this);
     this.setStateKey = this.setStateKey.bind(this);
     this.deleteModal = this.deleteModal.bind(this);
+    this.newKeyModal = this.newKeyModal.bind(this);
   }
 
   setStateKey(){
@@ -192,14 +193,9 @@ class KeyManagement extends Component{
   }
 
   onGetNewKey(){
-    if(this.state.key.length === 0){ // Doesn't prompt you to save your key if there isn't one in the box
-      this.setState({key: genKey()}, this.setStateKey );
-      this.props.setApprovedAddresses([]); // Resets the approved addresses field on creation of a new key
-    }
-    else if (window.confirm("Remember to save your key before generating a new one! Click cancel if you need to do this.")){ // Brings up a confirmation popup before generating a new key, if the input box has something in it
-      this.setState({key: genKey()}, this.setStateKey );
-      this.props.setApprovedAddresses([]); // Resets the approved addresses field on creation of a new key
-    }
+    this.setState({key: genKey()}, this.setStateKey );
+    this.props.setApprovedAddresses([]); // Resets the approved addresses field on creation of a new key
+    this.props.closeModal();
   }
 
   async onRetrievePreferences(event){
@@ -268,6 +264,14 @@ class KeyManagement extends Component{
     }
   }
 
+  newKeyModal(){
+    if(this.state.key.length === 0){ // Doesn't prompt you to save your key if there isn't one in the box
+      this.onGetNewKey();
+    }
+    else{
+      this.props.showModal(true, "Remember to save your key!", "Please save your key so you don't forget it. Click cancel if you need to do this.", "Proceed", this.onGetNewKey)
+    }
+  }
 
   deleteModal(){
     this.props.showModal(true, "Are you sure you want to delete these preferences?", "Once deleted you will not be able to get these preferences back.", "Proceed", this.onDeletePreferences)
@@ -291,7 +295,7 @@ class KeyManagement extends Component{
         
         <Row className="test"> 
         <Col><Button size="sm" variant="danger" onClick={this.deleteModal}>Delete These Preferences</Button></Col>
-        <Col><Button size="sm" variant="primary" onClick={this.onGetNewKey}>Get New Key</Button></Col>
+        <Col><Button size="sm" variant="primary" onClick={this.newKeyModal}>Get New Key</Button></Col>
         <Col><Button size="sm" variant="primary" type="submit">
           Retrieve
         </Button>

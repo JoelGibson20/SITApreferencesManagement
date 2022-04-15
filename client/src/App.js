@@ -144,7 +144,7 @@ class YourAccount extends Component{
 class KeyManagement extends Component{
   constructor(props){
     super(props);
-    this.state = {key: '', address: props.address, contract: props.contract, modalShow: false, cancelNeeded: null, modalTitle: '', modalBody: ''};
+    this.state = {key: '', address: props.address, contract: props.contract, modalShow: false, cancelNeeded: null, modalTitle: '', modalBody: '', modalOkFunction: null};
 
     this.handleChange = this.handleChange.bind(this);
     this.onGetNewKey = this.onGetNewKey.bind(this);
@@ -188,11 +188,11 @@ class KeyManagement extends Component{
         // Get the approved addresses for this preferences set
         this.props.setApprovedAddresses(approvedAddresses); // Calls the method to update the approved addresses in the ApprovedAddresses drop-down
         //window.alert("Preferences successfully retrieved")
-        this.handleShow(false, "Success!", "Preferences retrieved successfully.");
+        this.handleShow(false, "Success!", "Preferences retrieved successfully.", this.handleClose);
       }
       catch{
         //window.alert("Preferences unable to be retrieved, key not in use.")
-        this.handleShow(false, "Failure!", "Preferences unable to be retrieved, key not in use.");
+        this.handleShow(false, "Failure!", "Preferences unable to be retrieved, key not in use.", this.handleClose);
       }
   }
   }
@@ -248,8 +248,8 @@ class KeyManagement extends Component{
     this.setState({modalShow: false});
   }
 
-  handleShow(cancel, title, body){
-    this.setState({cancelNeeded: cancel, modalTitle: title, modalBody: body, modalShow: true});
+  handleShow(cancel, title, body, okFunction){
+    this.setState({cancelNeeded: cancel, modalTitle: title, modalBody: body, modalShow: true, modalOkFunction: okFunction});
   }
 
   render(){
@@ -279,7 +279,7 @@ class KeyManagement extends Component{
         </Row>
       </Form>
       
-      <Modal show={this.state.modalShow} onHide={this.handleClose} backdrop="static" keyboard={false}>
+      <Modal show={this.state.modalShow} backdrop="static" keyboard={false}>
         <Modal.Header>
           <Modal.Title>{this.state.modalTitle}</Modal.Title>
         </Modal.Header>
@@ -290,7 +290,7 @@ class KeyManagement extends Component{
             Cancel
          </Button>
           }
-          <Button variant="primary" onClick={this.handleClose}>
+          <Button variant="primary" onClick={this.state.modalOkFunction}>
             OK
           </Button>
         </Modal.Footer>

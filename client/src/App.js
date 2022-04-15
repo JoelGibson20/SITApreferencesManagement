@@ -439,7 +439,8 @@ class ApprovedAddresses extends Component{
     this.handleNewAddressChange = this.handleNewAddressChange.bind(this);
     this.handleRemoveAddressChange = this.handleRemoveAddressChange.bind(this);
     this.onAddAddress = this.onAddAddress.bind(this);
-    this.onRemoveAddress = this.onRemoveAddress.bind(this)
+    this.onRemoveAddress = this.onRemoveAddress.bind(this);
+    this.addAddressModal = this.addAddressModal.bind(this);
     this.removeAddressModal = this.removeAddressModal.bind(this);
   }
 
@@ -459,8 +460,8 @@ class ApprovedAddresses extends Component{
     this.setState({selectedAddress: event.target.value});
   }
 
-  async onAddAddress(event){
-    event.preventDefault();
+  async onAddAddress(){
+    this.props.closeModal();
     try{
       var retrPref = await this.props.contract.methods.getPreferences(this.props.address, hashKey(this.props.getKey())).call({from: this.props.address}); // Attempts to retrieve preferences for this address + key combo to see if there's anything to delete
       if((web3.utils.isAddress(this.state.newAddress)) && !(this.state.approvedAddresses.includes(this.state.newAddress)) && !(this.state.newAddress === this.props.address)){
@@ -518,6 +519,11 @@ class ApprovedAddresses extends Component{
     this.setState({selectedAddress: this.state.approvedAddresses[0]});
   }
 
+  addAddressModal(event){
+    event.preventDefault();
+    this.props.showModal(true, "Are you sure you want to add this approved address?", "Adding this approved address will allow these preferences to be retrieved by the user at this address.", "Proceed", this.onAddAddress);
+  }
+
   removeAddressModal(event){
     event.preventDefault();
     if(web3.utils.isAddress(this.state.selectedAddress)){
@@ -550,7 +556,7 @@ class ApprovedAddresses extends Component{
           </label>
         </Form>
         
-        <Form className="newAddressForm" onSubmit={this.onAddAddress}>
+        <Form className="newAddressForm" onSubmit={this.addAddressModal}>
         <label>
           Add an Approved Address:
           <Form.Control className="addAddressInput" type="text" size="sm" placeholder="Enter new address to approve" value={this.state.newAddress} onChange={this.handleNewAddressChange}></Form.Control>

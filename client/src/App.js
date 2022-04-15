@@ -123,7 +123,7 @@ class App extends Component {
            <PreferencesForm ref = {this.preferencesFormRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} showModal={this.showModal} closeModal={this.closeModal}/>
            </Col>
            <Col>
-            <ApprovedAddresses ref = {this.approvedAddressesRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} />
+            <ApprovedAddresses ref = {this.approvedAddressesRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} showModal={this.showModal} closeModal={this.closeModal} />
           </Col>
           </Row>
 
@@ -440,6 +440,7 @@ class ApprovedAddresses extends Component{
     this.handleRemoveAddressChange = this.handleRemoveAddressChange.bind(this);
     this.onAddAddress = this.onAddAddress.bind(this);
     this.onRemoveAddress = this.onRemoveAddress.bind(this)
+    this.removeAddressModal = this.removeAddressModal.bind(this);
   }
 
   updateApprovedAddresses(newApprovedAddresses){ // Updates approved addresses with a new list of approved addresses(called externally)
@@ -467,13 +468,13 @@ class ApprovedAddresses extends Component{
         if(success){
           this.setState({newAddress: ''});
           this.getNewAddressList();
-          window.alert("Address added successfully.");
+          this.props.showModal(false, "Success!", "Approved address added.", "OK", this.props.closeModal);
         }
       }
     }
   
     catch{
-      window.alert("No preferences found for this key, please set some preferences before adding approved addresses.");
+      this.props.showModal(false, "Failure!", "No preferences found for this key, please set some preferences before adding approved addresses.", "OK", this.props.closeModal);
     }
     
   }
@@ -501,23 +502,27 @@ class ApprovedAddresses extends Component{
 
   }
 
-  async onRemoveAddress(event){
-    event.preventDefault();
-    if(web3.utils.isAddress(this.state.selectedAddress)){
-      if (window.confirm("Removing this address means they will no longer be able to retrieve these preferences. Are you sure you want to remove this approved address? ")){
-        var success = await this.props.contract.methods.removeApprovedAddress(this.state.selectedAddress, hashKey(this.props.getKey())).send({from: this.props.address});
-        if(success){
-          this.getNewAddressList();
-          window.alert("Address removed successfully.");
-        }
-      }
+  async onRemoveAddress(){
+    this.props.closeModal();
+    var success = await this.props.contract.methods.removeApprovedAddress(this.state.selectedAddress, hashKey(this.props.getKey())).send({from: this.props.address});
+    if(success){
+      this.getNewAddressList();
+      this.props.showModal(false, "Success!", "Approved address removed.", "OK", this.props.closeModal) 
     }
+    
   }
 
   async getNewAddressList(){
     var newApprovedAddresses = await this.props.contract.methods.getApprovedAddresses(hashKey(this.props.getKey())).call({from:this.props.address });
     this.setState({approvedAddresses: newApprovedAddresses }); 
     this.setState({selectedAddress: this.state.approvedAddresses[0]});
+  }
+
+  removeAddressModal(event){
+    event.preventDefault();
+    if(web3.utils.isAddress(this.state.selectedAddress)){
+      this.props.showModal(true, "Are you sure you want to remove this approved address?", "Once removed this address will no longer be able to retrieve these preferences.", "Proceed", this.onRemoveAddress);
+    }
   }
 
   render(){
@@ -533,7 +538,7 @@ class ApprovedAddresses extends Component{
     return(
       <Container>
         <h4>Approved Addresses</h4>
-        <Form onSubmit={this.onRemoveAddress}>
+        <Form onSubmit={this.removeAddressModal}>
           <label>
             Approved Addresses:
             <Form.Control as="select" className="removeAddressSelect" size="sm"  id="approvedAddressSelect" value={this.state.selectedAddress} onChange={this.handleRemoveAddressChange}>

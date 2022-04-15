@@ -153,6 +153,7 @@ class KeyManagement extends Component{
     this.setStateKey = this.setStateKey.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleShow = this.handleShow.bind(this);
+    this.deleteModal = this.deleteModal.bind(this);
   }
 
   setStateKey(){
@@ -198,11 +199,11 @@ class KeyManagement extends Component{
   }
 
   async onDeletePreferences(){
-    if(window.confirm("Are you sure you want to delete these preferences?")){
       if(this.keyError()){
         window.alert("Invalid key. Please enter a valid key.")
       }
       else{
+        this.handleClose();
         try{
           var retrPref = await this.props.contract.methods.getPreferences(this.props.address, hashKey(this.state.key)).call({from: this.props.address}); // Attempts to retrieve preferences for this address + key combo to see if there's anything to delete
           var success = await this.props.contract.methods.deletePreferences(hashKey(this.state.key)).send({from: this.props.address});
@@ -216,7 +217,6 @@ class KeyManagement extends Component{
           window.alert("No preferences found for this key, nothing to delete.");
         }
       }
-    }
   }
 
   keyError(){
@@ -252,6 +252,10 @@ class KeyManagement extends Component{
     this.setState({cancelNeeded: cancel, modalTitle: title, modalBody: body, modalShow: true, modalOkMessage: okMessage, modalOkFunction: okFunction});
   }
 
+  deleteModal(){
+    this.handleShow(true, "Are you sure you want to delete these preferences?", "Once deleted you will not be able to get these preferences back.", "Proceed", this.onDeletePreferences)
+  }
+
   render(){
     return(
       <Container id="keyManagementDiv">
@@ -269,7 +273,7 @@ class KeyManagement extends Component{
         </Row>
         
         <Row className="test"> 
-        <Col><Button size="sm" variant="danger" onClick={this.onDeletePreferences}>Delete These Preferences</Button></Col>
+        <Col><Button size="sm" variant="danger" onClick={this.deleteModal}>Delete These Preferences</Button></Col>
         <Col><Button size="sm" variant="primary" onClick={this.onGetNewKey}>Get New Key</Button></Col>
         <Col><Button size="sm" variant="primary" type="submit">
           Retrieve

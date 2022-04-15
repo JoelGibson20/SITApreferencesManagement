@@ -144,7 +144,7 @@ class YourAccount extends Component{
 class KeyManagement extends Component{
   constructor(props){
     super(props);
-    this.state = {key: '', address: props.address, contract: props.contract, modalShow: false, cancelNeeded: null, modalTitle: '', modalBody: '', modalOkFunction: null};
+    this.state = {key: '', address: props.address, contract: props.contract, modalShow: false, cancelNeeded: null, modalTitle: '', modalBody: '',modalOkMessage: '', modalOkFunction: null};
 
     this.handleChange = this.handleChange.bind(this);
     this.onGetNewKey = this.onGetNewKey.bind(this);
@@ -188,11 +188,11 @@ class KeyManagement extends Component{
         // Get the approved addresses for this preferences set
         this.props.setApprovedAddresses(approvedAddresses); // Calls the method to update the approved addresses in the ApprovedAddresses drop-down
         //window.alert("Preferences successfully retrieved")
-        this.handleShow(false, "Success!", "Preferences retrieved successfully.", this.handleClose);
+        this.handleShow(false, "Success!", "Preferences retrieved successfully.", "OK", this.handleClose);
       }
       catch{
         //window.alert("Preferences unable to be retrieved, key not in use.")
-        this.handleShow(false, "Failure!", "Preferences unable to be retrieved, key not in use.", this.handleClose);
+        this.handleShow(false, "Failure!", "Preferences unable to be retrieved, key not in use.", "OK", this.handleClose);
       }
   }
   }
@@ -248,8 +248,8 @@ class KeyManagement extends Component{
     this.setState({modalShow: false});
   }
 
-  handleShow(cancel, title, body, okFunction){
-    this.setState({cancelNeeded: cancel, modalTitle: title, modalBody: body, modalShow: true, modalOkFunction: okFunction});
+  handleShow(cancel, title, body, okMessage, okFunction){
+    this.setState({cancelNeeded: cancel, modalTitle: title, modalBody: body, modalShow: true, modalOkMessage: okMessage, modalOkFunction: okFunction});
   }
 
   render(){
@@ -291,7 +291,7 @@ class KeyManagement extends Component{
          </Button>
           }
           <Button variant="primary" onClick={this.state.modalOkFunction}>
-            OK
+           {this.state.modalOkMessage}
           </Button>
         </Modal.Footer>
       </Modal>

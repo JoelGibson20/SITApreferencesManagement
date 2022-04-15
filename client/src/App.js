@@ -307,12 +307,13 @@ class KeyManagement extends Component{
 class PreferencesForm extends Component{
   constructor(props){
       super(props);
-      this.state = {spatial: "0", identity: "0", temporal: "0", activity: "0"};
+      this.state = {spatial: "0", identity: "0", temporal: "0", activity: "0", modalShow: false, cancelNeeded: null, modalTitle: '', modalBody: '',modalOkMessage: '', modalOkFunction: null};
 
       this.handleChange = this.handleChange.bind(this);
       this.onSubmit = this.onSubmit.bind(this);
       this.updatePrefs = this.updatePrefs.bind(this);
-
+      this.closeModal = this.closeModal.bind(this);
+      this.showModal = this.showModal.bind(this);
 
   }
 
@@ -349,10 +350,10 @@ class PreferencesForm extends Component{
     var re = /[0-9A-Fa-f]{64}/g; // Hexadecimal regex expression
 
     if(key.length !== 64){ // Checks key is of right length, otherwise don't try and encrypt (encryption with wrong key length causes error)
-      window.alert("Key wrong length, please use a valid key.");
+      this.showModal(false, "Failure!", "Key is the wrong length, please use a valid key.", "OK", this.closeModal)
     }
     else if(!re.test(key)){
-      window.alert("Key must be hexadecimal, please use a valid key.")
+      this.showModal(false, "Failure!", "Key must be hexadecimal, please use a valid key.", "OK", this.closeModal)
     }
     else{
       var encPref = encryptPreferences(prefs,key);
@@ -360,6 +361,15 @@ class PreferencesForm extends Component{
       await this.props.contract.methods.setPreferences(encPref,hashKey(this.props.getKey())).send({from: this.props.address});
     }
   }
+
+  closeModal(){
+    this.setState({modalShow: false});
+  }
+
+  showModal(cancel, title, body, okMessage, okFunction){
+    this.setState({cancelNeeded: cancel, modalTitle: title, modalBody: body, modalShow: true, modalOkMessage: okMessage, modalOkFunction: okFunction});
+  }
+
 
   render(){
     return(
@@ -417,6 +427,23 @@ class PreferencesForm extends Component{
                     Submit
                 </Button>
               </Form>
+
+      <Modal show={this.state.modalShow} backdrop="static" keyboard={false}>
+        <Modal.Header>
+          <Modal.Title>{this.state.modalTitle}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{this.state.modalBody}</Modal.Body>
+        <Modal.Footer>
+          {this.state.cancelNeeded == true &&
+           <Button variant="secondary" onClick={this.closeModal}>
+            Cancel
+         </Button>
+          }
+          <Button variant="primary" onClick={this.state.modalOkFunction}>
+           {this.state.modalOkMessage}
+          </Button>
+        </Modal.Footer>
+      </Modal>
       </Container>
     );
   }

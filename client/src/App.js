@@ -151,8 +151,8 @@ class KeyManagement extends Component{
     this.onRetrievePreferences = this.onRetrievePreferences.bind(this);
     this.onDeletePreferences= this.onDeletePreferences.bind(this);
     this.setStateKey = this.setStateKey.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-    this.handleShow = this.handleShow.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.showModal = this.showModal.bind(this);
     this.deleteModal = this.deleteModal.bind(this);
   }
 
@@ -188,33 +188,31 @@ class KeyManagement extends Component{
         var approvedAddresses = await this.props.contract.methods.getApprovedAddresses(hashKey(this.state.key)).call({from:this.props.address });
         // Get the approved addresses for this preferences set
         this.props.setApprovedAddresses(approvedAddresses); // Calls the method to update the approved addresses in the ApprovedAddresses drop-down
-        //window.alert("Preferences successfully retrieved")
-        this.handleShow(false, "Success!", "Preferences retrieved successfully.", "OK", this.handleClose);
+        this.showModal(false, "Success!", "Preferences retrieved successfully.", "OK", this.closeModal);
       }
       catch{
-        //window.alert("Preferences unable to be retrieved, key not in use.")
-        this.handleShow(false, "Failure!", "Preferences unable to be retrieved, key not in use.", "OK", this.handleClose);
+        this.showModal(false, "Failure!", "Preferences unable to be retrieved, key not in use.", "OK", this.closeModal);
       }
   }
   }
 
   async onDeletePreferences(){
       if(this.keyError()){
-        window.alert("Invalid key. Please enter a valid key.")
+        this.showModal(false, "Failure!", "Invalid key. Please enter a valid key.", "OK", this.closeModal);
       }
       else{
-        this.handleClose();
+        this.closeModal();
         try{
           var retrPref = await this.props.contract.methods.getPreferences(this.props.address, hashKey(this.state.key)).call({from: this.props.address}); // Attempts to retrieve preferences for this address + key combo to see if there's anything to delete
           var success = await this.props.contract.methods.deletePreferences(hashKey(this.state.key)).send({from: this.props.address});
           if(success){
             this.setState({key: ''}, this.setStateKey); // Clears secret key input after preferences deleted
             this.props.setPref('0000'); // Resets preference form back to default
-            window.alert("Preferences deleted successfully."); // Informs the user preferences were deleted
+            this.showModal(false, "Success!", "Preferences deleted successfully.", "OK", this.closeModal);
           }
         }
         catch{
-          window.alert("No preferences found for this key, nothing to delete.");
+          this.showModal(false, "Failure!", "No preferences found for this key, nothing to delete.", "OK", this.closeModal);
         }
       }
   }
@@ -244,16 +242,16 @@ class KeyManagement extends Component{
     }
   }
 
-  handleClose(){
+  closeModal(){
     this.setState({modalShow: false});
   }
 
-  handleShow(cancel, title, body, okMessage, okFunction){
+  showModal(cancel, title, body, okMessage, okFunction){
     this.setState({cancelNeeded: cancel, modalTitle: title, modalBody: body, modalShow: true, modalOkMessage: okMessage, modalOkFunction: okFunction});
   }
 
   deleteModal(){
-    this.handleShow(true, "Are you sure you want to delete these preferences?", "Once deleted you will not be able to get these preferences back.", "Proceed", this.onDeletePreferences)
+    this.showModal(true, "Are you sure you want to delete these preferences?", "Once deleted you will not be able to get these preferences back.", "Proceed", this.onDeletePreferences)
   }
 
   render(){
@@ -290,7 +288,7 @@ class KeyManagement extends Component{
         <Modal.Body>{this.state.modalBody}</Modal.Body>
         <Modal.Footer>
           {this.state.cancelNeeded == true &&
-           <Button variant="secondary" onClick={this.handleClose}>
+           <Button variant="secondary" onClick={this.closeModal}>
             Cancel
          </Button>
           }

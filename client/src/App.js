@@ -144,7 +144,7 @@ class YourAccount extends Component{
 class KeyManagement extends Component{
   constructor(props){
     super(props);
-    this.state = {key: '', address: props.address, contract: props.contract, retrieveSuccessShow: false};
+    this.state = {key: '', address: props.address, contract: props.contract, alertShow: false};
 
     this.handleChange = this.handleChange.bind(this);
     this.onGetNewKey = this.onGetNewKey.bind(this);
@@ -244,11 +244,11 @@ class KeyManagement extends Component{
   }
 
   handleClose(){
-    this.setState({retrieveSuccessShow: false});
+    this.setState({alertShow: false});
   }
 
   handleShow(){
-    this.setState({retrieveSuccessShow: true});
+    this.setState({alertShow: true});
   }
 
   render(){
@@ -278,17 +278,14 @@ class KeyManagement extends Component{
         </Row>
       </Form>
       
-      <Modal show={this.state.retrieveSuccessShow} onHide={this.handleClose} animation={false}>
-        <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+      <Modal show={this.state.alertShow} onHide={this.handleClose} backdrop="static" keyboard={false}>
+        <Modal.Header>
+          <Modal.Title>Success!</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+        <Modal.Body>Preferences Successfully Retrieved</Modal.Body>
         <Modal.Footer>
-          <Button show={false} variant="secondary" onClick={this.handleClose}>
-            
-          </Button>
           <Button variant="primary" onClick={this.handleClose}>
-            Save Changes
+            OK
           </Button>
         </Modal.Footer>
       </Modal>

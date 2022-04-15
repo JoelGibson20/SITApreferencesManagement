@@ -3,7 +3,7 @@ import getWeb3 from "./getWeb3";
 import SITAPreferencesContract from "./contracts/SITApreferences2.json";
 import {encryptPreferences, decryptPreferences, genKey, hashKey} from "./crypto-methods";
 import web3 from "web3";
-import {Container, Button, Navbar, Form, Row, Col} from 'react-bootstrap/';
+import {Container, Button, Navbar, Form, Row, Col, Modal} from 'react-bootstrap/';
 
 import "./App.css";
 import "./bootstrap.min.css"
@@ -144,13 +144,15 @@ class YourAccount extends Component{
 class KeyManagement extends Component{
   constructor(props){
     super(props);
-    this.state = {key: '', address: props.address, contract: props.contract};
+    this.state = {key: '', address: props.address, contract: props.contract, retrieveSuccessShow: false};
 
     this.handleChange = this.handleChange.bind(this);
     this.onGetNewKey = this.onGetNewKey.bind(this);
     this.onRetrievePreferences = this.onRetrievePreferences.bind(this);
     this.onDeletePreferences= this.onDeletePreferences.bind(this);
-    this.setStateKey= this.setStateKey.bind(this);
+    this.setStateKey = this.setStateKey.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleShow = this.handleShow.bind(this);
   }
 
   setStateKey(){
@@ -185,7 +187,8 @@ class KeyManagement extends Component{
         var approvedAddresses = await this.props.contract.methods.getApprovedAddresses(hashKey(this.state.key)).call({from:this.props.address });
         // Get the approved addresses for this preferences set
         this.props.setApprovedAddresses(approvedAddresses); // Calls the method to update the approved addresses in the ApprovedAddresses drop-down
-        window.alert("Preferences successfully retrieved")
+        //window.alert("Preferences successfully retrieved")
+        this.handleShow();
       }
       catch{
         window.alert("Preferences unable to be retrieved, key not in use.")
@@ -240,6 +243,14 @@ class KeyManagement extends Component{
     }
   }
 
+  handleClose(){
+    this.setState({retrieveSuccessShow: false});
+  }
+
+  handleShow(){
+    this.setState({retrieveSuccessShow: true});
+  }
+
   render(){
     return(
       <Container id="keyManagementDiv">
@@ -266,7 +277,23 @@ class KeyManagement extends Component{
         
         </Row>
       </Form>
-        
+      
+      <Modal show={this.state.retrieveSuccessShow} onHide={this.handleClose} animation={false}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+        <Modal.Footer>
+          <Button show={false} variant="secondary" onClick={this.handleClose}>
+            
+          </Button>
+          <Button variant="primary" onClick={this.handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
       </Container>
     );
   }
@@ -497,22 +524,22 @@ class ApprovedAddresses extends Component{
         <Form onSubmit={this.onRemoveAddress}>
           <label>
             Approved Addresses:
-            <Form.Control as="select" size="sm"  id="approvedAddressSelect" value={this.state.selectedAddress} onChange={this.handleRemoveAddressChange}>
+            <Form.Control as="select" className="removeAddressSelect" size="sm"  id="approvedAddressSelect" value={this.state.selectedAddress} onChange={this.handleRemoveAddressChange}>
               {addressList}
               </Form.Control>
-              <Button size="lg" variant="danger" type="submit">
+              <Button size="sm" variant="danger" type="submit">
                     Remove this address
                 </Button>
           </label>
         </Form>
         
-        <Form onSubmit={this.onAddAddress}>
+        <Form className="newAddressForm" onSubmit={this.onAddAddress}>
         <label>
           Add an Approved Address:
-          <Form.Control type="text" size="sm" placeholder="Enter new address to approve" value={this.state.newAddress} onChange={this.handleNewAddressChange}></Form.Control>
+          <Form.Control className="addAddressInput" type="text" size="sm" placeholder="Enter new address to approve" value={this.state.newAddress} onChange={this.handleNewAddressChange}></Form.Control>
         
       
-          <Button size="lg" variant="primary" type="submit">
+          <Button size="sm" variant="primary" type="submit" id="newAddressInput" name="newAddressInput">
                     Add new address
           </Button>
         </label>

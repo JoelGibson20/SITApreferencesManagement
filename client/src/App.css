@@ -40,3 +40,16 @@
   background-color: rgb(105, 162, 255);
 }
 
+.removeAddressSelect{
+  width:fit-content;
+}
+
+.addAddressInput{
+  width:fit-content;
+}
+
+
+.newAddressForm{
+  padding: 10%;
+}
+

@@ -233,8 +233,10 @@ class KeyManagement extends Component{
             this.props.showModal(false, "Success!", "Preferences deleted successfully.", "OK", this.props.closeModal);
           }
         }
-        catch{
-          this.props.showModal(false, "Failure!", "No preferences found for this key, nothing to delete.", "OK", this.props.closeModal);
+        catch(e){
+          if(!(e.code === 4001)){ //Error code for user cancelling MetaMask tranasction
+            this.props.showModal(false, "Failure!", "No preferences found for this key, nothing to delete.", "OK", this.props.closeModal);
+          }
         }
       }
   }
@@ -474,8 +476,10 @@ class ApprovedAddresses extends Component{
       }
     }
   
-    catch{
-      this.props.showModal(false, "Failure!", "No preferences found for this key, please set some preferences before adding approved addresses.", "OK", this.props.closeModal);
+    catch(e){
+      if(!(e.code === 4001)){ //Error code for user cancelling MetaMask tranasction
+        this.props.showModal(false, "Failure!", "No preferences found for this key, nothing to delete.", "OK", this.props.closeModal);
+      }
     }
     
   }

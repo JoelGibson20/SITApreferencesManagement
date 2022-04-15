@@ -11,13 +11,14 @@ import "./bootstrap.min.css"
 class App extends Component {
   constructor(props){
     super(props);
-    this.state = { storageValue: 0, web3: null, accounts: null, contract: null, address: '0x0', key: '', pref: ''};
+    this.state = { storageValue: 0, web3: null, accounts: null, contract: null, address: '0x0', key: '', pref: '', modalShow: false, cancelNeeded: null, modalTitle: '', modalBody: '',modalOkMessage: '', modalOkFunction: null};
     this.setKey = this.setKey.bind(this);
     this.outputKey = this.outputKey.bind(this);
-
     this.setPref = this.setPref.bind(this);
     this.outputPref = this.outputPref.bind(this);
     this.getKey = this.getKey.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+    this.showModal = this.showModal.bind(this);
 
     this.setApprovedAddresses = this.setApprovedAddresses.bind(this);
 
@@ -95,6 +96,14 @@ class App extends Component {
     this.approvedAddressesRef.current.updateApprovedAddresses(newApprovedAddresses);
   }
 
+  closeModal(){
+    this.setState({modalShow: false});
+  }
+
+  showModal(cancel, title, body, okMessage, okFunction){
+    this.setState({cancelNeeded: cancel, modalTitle: title, modalBody: body, modalShow: true, modalOkMessage: okMessage, modalOkFunction: okFunction});
+  }
+
   render() {
     if (!this.state.web3) {
       return <div>Loading Web3, accounts, and contract. If you haven't already, please log in to your account using the MetaMask extension.</div>;
@@ -104,7 +113,7 @@ class App extends Component {
         <Navbar className="navbar-colour" variant="light"  expand="lg">
           <Container>
           <YourAccount address = {this.state.address}/>
-          <KeyManagement setKey = {this.setKey} setPref = {this.setPref} setApprovedAddresses = {this.setApprovedAddresses} address = {this.state.address} contract = {this.state.contract} />
+          <KeyManagement setKey = {this.setKey} setPref = {this.setPref} setApprovedAddresses = {this.setApprovedAddresses} address = {this.state.address} contract = {this.state.contract} showModal={this.showModal} closeModal={this.closeModal}/>
           </Container>
         </Navbar>
         <br/>
@@ -117,7 +126,25 @@ class App extends Component {
             <ApprovedAddresses ref = {this.approvedAddressesRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} />
           </Col>
           </Row>
-       </Container>   
+
+        <Modal show={this.state.modalShow} backdrop="static" keyboard={false}>
+        <Modal.Header>
+          <Modal.Title>{this.state.modalTitle}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{this.state.modalBody}</Modal.Body>
+        <Modal.Footer>
+          {this.state.cancelNeeded == true &&
+           <Button variant="secondary" onClick={this.closeModal}>
+            Cancel
+         </Button>
+          }
+          <Button variant="primary" onClick={this.state.modalOkFunction}>
+           {this.state.modalOkMessage}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      
+      </Container>   
       </div>
     );
   }
@@ -151,8 +178,6 @@ class KeyManagement extends Component{
     this.onRetrievePreferences = this.onRetrievePreferences.bind(this);
     this.onDeletePreferences= this.onDeletePreferences.bind(this);
     this.setStateKey = this.setStateKey.bind(this);
-    this.closeModal = this.closeModal.bind(this);
-    this.showModal = this.showModal.bind(this);
     this.deleteModal = this.deleteModal.bind(this);
   }
 
@@ -188,31 +213,31 @@ class KeyManagement extends Component{
         var approvedAddresses = await this.props.contract.methods.getApprovedAddresses(hashKey(this.state.key)).call({from:this.props.address });
         // Get the approved addresses for this preferences set
         this.props.setApprovedAddresses(approvedAddresses); // Calls the method to update the approved addresses in the ApprovedAddresses drop-down
-        this.showModal(false, "Success!", "Preferences retrieved successfully.", "OK", this.closeModal);
+        this.props.showModal(false, "Success!", "Preferences retrieved successfully.", "OK", this.props.closeModal);
       }
       catch{
-        this.showModal(false, "Failure!", "Preferences unable to be retrieved, key not in use.", "OK", this.closeModal);
+        this.props.showModal(false, "Failure!", "Preferences unable to be retrieved, key not in use.", "OK", this.props.closeModal);
       }
   }
   }
 
   async onDeletePreferences(){
       if(this.keyError()){
-        this.showModal(false, "Failure!", "Invalid key. Please enter a valid key.", "OK", this.closeModal);
+        this.props.showModal(false, "Failure!", "Invalid key. Please enter a valid key.", "OK", this.props.closeModal);
       }
       else{
-        this.closeModal();
+        this.props.closeModal();
         try{
           var retrPref = await this.props.contract.methods.getPreferences(this.props.address, hashKey(this.state.key)).call({from: this.props.address}); // Attempts to retrieve preferences for this address + key combo to see if there's anything to delete
           var success = await this.props.contract.methods.deletePreferences(hashKey(this.state.key)).send({from: this.props.address});
           if(success){
             this.setState({key: ''}, this.setStateKey); // Clears secret key input after preferences deleted
             this.props.setPref('0000'); // Resets preference form back to default
-            this.showModal(false, "Success!", "Preferences deleted successfully.", "OK", this.closeModal);
+            this.props.props.showModal(false, "Success!", "Preferences deleted successfully.", "OK", this.props.closeModal);
           }
         }
         catch{
-          this.showModal(false, "Failure!", "No preferences found for this key, nothing to delete.", "OK", this.closeModal);
+          this.props.showModal(false, "Failure!", "No preferences found for this key, nothing to delete.", "OK", this.props.closeModal);
         }
       }
   }
@@ -242,16 +267,9 @@ class KeyManagement extends Component{
     }
   }
 
-  closeModal(){
-    this.setState({modalShow: false});
-  }
-
-  showModal(cancel, title, body, okMessage, okFunction){
-    this.setState({cancelNeeded: cancel, modalTitle: title, modalBody: body, modalShow: true, modalOkMessage: okMessage, modalOkFunction: okFunction});
-  }
 
   deleteModal(){
-    this.showModal(true, "Are you sure you want to delete these preferences?", "Once deleted you will not be able to get these preferences back.", "Proceed", this.onDeletePreferences)
+    this.props.showModal(true, "Are you sure you want to delete these preferences?", "Once deleted you will not be able to get these preferences back.", "Proceed", this.onDeletePreferences)
   }
 
   render(){
@@ -280,24 +298,6 @@ class KeyManagement extends Component{
         
         </Row>
       </Form>
-      
-      <Modal show={this.state.modalShow} backdrop="static" keyboard={false}>
-        <Modal.Header>
-          <Modal.Title>{this.state.modalTitle}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{this.state.modalBody}</Modal.Body>
-        <Modal.Footer>
-          {this.state.cancelNeeded == true &&
-           <Button variant="secondary" onClick={this.closeModal}>
-            Cancel
-         </Button>
-          }
-          <Button variant="primary" onClick={this.state.modalOkFunction}>
-           {this.state.modalOkMessage}
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
 
       </Container>
     );

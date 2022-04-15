@@ -144,7 +144,7 @@ class YourAccount extends Component{
 class KeyManagement extends Component{
   constructor(props){
     super(props);
-    this.state = {key: '', address: props.address, contract: props.contract, alertShow: false, cancelNeeded: null};
+    this.state = {key: '', address: props.address, contract: props.contract, modalShow: false, cancelNeeded: null, modalTitle: '', modalBody: ''};
 
     this.handleChange = this.handleChange.bind(this);
     this.onGetNewKey = this.onGetNewKey.bind(this);
@@ -188,10 +188,11 @@ class KeyManagement extends Component{
         // Get the approved addresses for this preferences set
         this.props.setApprovedAddresses(approvedAddresses); // Calls the method to update the approved addresses in the ApprovedAddresses drop-down
         //window.alert("Preferences successfully retrieved")
-        this.handleShow(false);
+        this.handleShow(false, "Success!", "Preferences retrieved successfully.");
       }
       catch{
-        window.alert("Preferences unable to be retrieved, key not in use.")
+        //window.alert("Preferences unable to be retrieved, key not in use.")
+        this.handleShow(false, "Failure!", "Preferences unable to be retrieved, key not in use.");
       }
   }
   }
@@ -244,11 +245,11 @@ class KeyManagement extends Component{
   }
 
   handleClose(){
-    this.setState({alertShow: false});
+    this.setState({modalShow: false});
   }
 
-  handleShow(cancel){
-    this.setState({cancelNeeded: cancel},this.setState({alertShow: true}));
+  handleShow(cancel, title, body){
+    this.setState({cancelNeeded: cancel, modalTitle: title, modalBody: body, modalShow: true});
   }
 
   render(){
@@ -278,11 +279,11 @@ class KeyManagement extends Component{
         </Row>
       </Form>
       
-      <Modal show={this.state.alertShow} onHide={this.handleClose} backdrop="static" keyboard={false}>
+      <Modal show={this.state.modalShow} onHide={this.handleClose} backdrop="static" keyboard={false}>
         <Modal.Header>
-          <Modal.Title>Success!</Modal.Title>
+          <Modal.Title>{this.state.modalTitle}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Preferences Successfully Retrieved</Modal.Body>
+        <Modal.Body>{this.state.modalBody}</Modal.Body>
         <Modal.Footer>
           {this.state.cancelNeeded == true &&
            <Button variant="secondary" onClick={this.handleClose}>

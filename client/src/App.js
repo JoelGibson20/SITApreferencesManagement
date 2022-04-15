@@ -171,7 +171,7 @@ class YourAccount extends Component{
 class KeyManagement extends Component{
   constructor(props){
     super(props);
-    this.state = {key: '', address: props.address, contract: props.contract, modalShow: false, cancelNeeded: null, modalTitle: '', modalBody: '',modalOkMessage: '', modalOkFunction: null};
+    this.state = {key: '', address: props.address, contract: props.contract};
 
     this.handleChange = this.handleChange.bind(this);
     this.onGetNewKey = this.onGetNewKey.bind(this);
@@ -312,7 +312,7 @@ class KeyManagement extends Component{
 class PreferencesForm extends Component{
   constructor(props){
       super(props);
-      this.state = {spatial: "0", identity: "0", temporal: "0", activity: "0", modalShow: false, cancelNeeded: null, modalTitle: '', modalBody: '',modalOkMessage: '', modalOkFunction: null};
+      this.state = {spatial: "0", identity: "0", temporal: "0", activity: "0"};
 
       this.handleChange = this.handleChange.bind(this);
       this.onSubmit = this.onSubmit.bind(this);

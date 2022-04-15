@@ -144,7 +144,7 @@ class YourAccount extends Component{
 class KeyManagement extends Component{
   constructor(props){
     super(props);
-    this.state = {key: '', address: props.address, contract: props.contract, alertShow: false};
+    this.state = {key: '', address: props.address, contract: props.contract, alertShow: false, cancelNeeded: null};
 
     this.handleChange = this.handleChange.bind(this);
     this.onGetNewKey = this.onGetNewKey.bind(this);
@@ -188,7 +188,7 @@ class KeyManagement extends Component{
         // Get the approved addresses for this preferences set
         this.props.setApprovedAddresses(approvedAddresses); // Calls the method to update the approved addresses in the ApprovedAddresses drop-down
         //window.alert("Preferences successfully retrieved")
-        this.handleShow();
+        this.handleShow(false);
       }
       catch{
         window.alert("Preferences unable to be retrieved, key not in use.")
@@ -247,8 +247,8 @@ class KeyManagement extends Component{
     this.setState({alertShow: false});
   }
 
-  handleShow(){
-    this.setState({alertShow: true});
+  handleShow(cancel){
+    this.setState({cancelNeeded: cancel},this.setState({alertShow: true}));
   }
 
   render(){
@@ -284,6 +284,11 @@ class KeyManagement extends Component{
         </Modal.Header>
         <Modal.Body>Preferences Successfully Retrieved</Modal.Body>
         <Modal.Footer>
+          {this.state.cancelNeeded == true &&
+           <Button variant="secondary" onClick={this.handleClose}>
+            Cancel
+         </Button>
+          }
           <Button variant="primary" onClick={this.handleClose}>
             OK
           </Button>

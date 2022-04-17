@@ -2,13 +2,6 @@
   text-align: center;
 }
 
-.TopBar{
-  background-color: #09d3ac;
-  width: 100%;
-  height: fit-content;
-  float:left;
-}
-
 #yourAccountDiv{
   float:left;
   padding: 5px;  
@@ -17,16 +10,15 @@
 #yourAccount{
   text-align: center;
   padding: 8px;
-  background-color:rgb(158,223,251);
-  border: 2px solid black;
+  background-color: rgb(172, 196, 235);
+  border: 2px solid rgb(156, 178, 212);
   border-radius: 8px;
-  /*box-shadow: 2px 4px green;*/
+  box-shadow: 2px 4px rgb(156, 178, 212);
 }
 
 #keyManagementDiv{
   float:right;
   padding: 5px;
-  background-color: rgb(105, 162, 255);
   border-radius: 8px;
   width:90%;
   
@@ -37,7 +29,8 @@
 }
 
 .navbar-colour{
-  background-color: rgb(105, 162, 255);
+  background-color: rgb(191, 212, 245);
+  box-shadow: 1px 2px rgb(156, 178, 212);
 }
 
 .select{
@@ -62,7 +55,7 @@
 }
 
 .approvedAddresses{
-  background-color: rgb(224, 224, 224);
+ 
 }
 
 .submitButton{

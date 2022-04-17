@@ -127,6 +127,8 @@ class App extends Component {
           </Col>
           </Row>
 
+        <DeleteAllPreferences address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} showModal={this.showModal} closeModal={this.closeModal}/>
+
         <Modal show={this.state.modalShow} backdrop="static" keyboard={false}>
         <Modal.Header>
           <Modal.Title>{this.state.modalTitle}</Modal.Title>
@@ -571,6 +573,32 @@ class ApprovedAddresses extends Component{
           </Button>
         </label>
       </Form>
+      </Container>
+    );
+  }
+}
+
+class DeleteAllPreferences extends Component{
+  constructor(props){
+    super(props);
+
+    this.onDeleteAllPreferences = this.onDeleteAllPreferences.bind(this);
+    this.deleteAllModal = this.deleteAllModal.bind(this);
+  }
+
+  onDeleteAllPreferences(){
+    console.log("delete all preferences")
+  }
+
+  deleteAllModal(){
+    this.props.showModal(true, "Are you sure you want to delete ALL your preferences?", "Proceeding will delete all preferences under all keys attached to your account. Once deleted you will not be able to get these preferences back. This is an emergency measure.", "Proceed", this.onDeleteAllPreferences);
+  }
+  render(){
+    return(
+      <Container>
+        <Button className="dangerButton" size="lg" variant="danger" onClick={this.deleteAllModal}>
+            Delete All Preferences
+        </Button>
       </Container>
     );
   }

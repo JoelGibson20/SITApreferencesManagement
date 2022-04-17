@@ -28,6 +28,10 @@
   padding:10px;
 }
 
+.keyInput{
+  box-shadow: 1px 2px rgb(210, 216, 228);
+}
+
 .navbar-colour{
   background-color: rgb(191, 212, 245);
   box-shadow: 1px 2px rgb(156, 178, 212);
@@ -39,6 +43,7 @@
   margin-top: 15px;
   margin-bottom: 15px;
   text-align: center;
+  box-shadow: 1px 2px rgb(210, 216, 228);
 }
 
 .addAddressInput{
@@ -53,6 +58,7 @@
 
 .dimensionInput{
   margin: 15px;
+  box-shadow: 1px 2px rgb(210, 216, 228);
 }
 
 .approvedAddresses{

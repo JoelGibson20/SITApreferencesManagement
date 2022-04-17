@@ -198,15 +198,17 @@ contract SITApreferences2{
 
     }
 
-    function deleteAllPreferences() public{
+    function deleteAllPreferences() public returns (bool success){
       // The nuclear option. Allows user to delete all preference sets stored for them without providing the key.
       // For use in case a user wants to delete a preference set but has forgotten the key
 
       string[] memory keysInUse = usedKeys[msg.sender]; // Gets all the keys the user has
-
+  
       for(uint i; i < keysInUse.length; i++){ // Iterates through all the keys the user has
         deletePreferences(keysInUse[i]); // Deletes the preference set under this key
       }
+
+      return(true);
     }
 
 }

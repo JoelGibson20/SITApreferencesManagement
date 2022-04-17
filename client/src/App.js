@@ -211,7 +211,7 @@ class KeyManagement extends Component{
         var approvedAddresses = await this.props.contract.methods.getApprovedAddresses(hashKey(this.state.key)).call({from:this.props.address });
         // Get the approved addresses for this preferences set
         this.props.setApprovedAddresses(approvedAddresses); // Calls the method to update the approved addresses in the ApprovedAddresses drop-down
-        this.props.showModal(false, "Success!", "Preferences retrieved successfully.", "OK", this.props.closeModal);
+        this.props.showModal(false, "Success!", "Preferences retrieved for this key.", "OK", this.props.closeModal);
       }
       catch{
         this.props.showModal(false, "Failure!", "Preferences unable to be retrieved, key not in use.", "OK", this.props.closeModal);
@@ -232,7 +232,7 @@ class KeyManagement extends Component{
           if(success){
             this.setState({key: ''}, this.setStateKey); // Clears secret key input after preferences deleted
             this.props.setPref('0000'); // Resets preference form back to default
-            this.props.showModal(false, "Success!", "Preferences deleted successfully.", "OK", this.props.closeModal);
+            this.props.showModal(false, "Success!", "Preferences deleted under this key.", "OK", this.props.closeModal);
           }
         }
         catch(e){
@@ -586,8 +586,16 @@ class DeleteAllPreferences extends Component{
     this.deleteAllModal = this.deleteAllModal.bind(this);
   }
 
-  onDeleteAllPreferences(){
-    console.log("delete all preferences")
+  async onDeleteAllPreferences(){
+    this.props.closeModal();
+    var success = await this.props.contract.methods.deleteAllPreferences().send({from: this.props.address});
+    if(success){
+      this.props.showModal(false, "Success!", "All preferences deleted for this account..", "OK", this.props.closeModal);
+    }
+    else{
+      this.props.showModal(false, "Failure!", "Something went wrong.", "OK", this.props.closeModal);
+    }
+
   }
 
   deleteAllModal(){

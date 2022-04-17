@@ -27,6 +27,8 @@ class App extends Component {
 
     this.approvedAddressesRef = React.createRef(); // Create reference for our ApprovedAddresses Component
     // This reference is used when approved addresses are retrieved alongside preferences, so that the approved addresses drop-down can be updated to show approved addresseses
+
+    this.keyManagementRef = React.createRef();
   }
 
   componentDidMount = async () => {
@@ -71,8 +73,12 @@ class App extends Component {
 
 
   setKey(newKey){
-    //console.log("Key received: ",newKey);
-    this.setState({key: newKey}, this.outputKey);
+    this.setState({key: newKey});
+    if(newKey == ''){ // When delete all preferences completes it will reset the secret key box like so
+      this.keyManagementRef.current.setNewKey();
+    }
+    
+    
   }
 
   getKey(){
@@ -113,7 +119,7 @@ class App extends Component {
         <Navbar className="navbar-colour" variant="light"  expand="lg">
           <Container>
           <YourAccount address = {this.state.address}/>
-          <KeyManagement setKey = {this.setKey} setPref = {this.setPref} setApprovedAddresses = {this.setApprovedAddresses} address = {this.state.address} contract = {this.state.contract} showModal={this.showModal} closeModal={this.closeModal}/>
+          <KeyManagement ref={this.keyManagementRef} setKey = {this.setKey} getKey={this.getKey} setPref = {this.setPref} setApprovedAddresses = {this.setApprovedAddresses} address = {this.state.address} contract = {this.state.contract} showModal={this.showModal} closeModal={this.closeModal}/>
           </Container>
         </Navbar>
         <br/>
@@ -127,7 +133,7 @@ class App extends Component {
           </Col>
           </Row>
 
-        <DeleteAllPreferences address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} showModal={this.showModal} closeModal={this.closeModal}/>
+        <DeleteAllPreferences setKey = {this.setKey} setPref = {this.setPref} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} showModal={this.showModal} closeModal={this.closeModal}/>
 
         <Modal show={this.state.modalShow} backdrop="static" keyboard={false}>
         <Modal.Header>
@@ -179,9 +185,15 @@ class KeyManagement extends Component{
     this.onGetNewKey = this.onGetNewKey.bind(this);
     this.onRetrievePreferences = this.onRetrievePreferences.bind(this);
     this.onDeletePreferences= this.onDeletePreferences.bind(this);
+    this.setNewKey = this.setNewKey.bind(this);
     this.setStateKey = this.setStateKey.bind(this);
     this.deleteModal = this.deleteModal.bind(this);
     this.newKeyModal = this.newKeyModal.bind(this);
+  }
+  
+
+  setNewKey(){ // Outside method to be used with ref to reset key when all preferences deleted
+    this.setState({key: ''});
   }
 
   setStateKey(){
@@ -590,6 +602,8 @@ class DeleteAllPreferences extends Component{
     this.props.closeModal();
     var success = await this.props.contract.methods.deleteAllPreferences().send({from: this.props.address});
     if(success){
+      this.props.setKey(''); // Clears secret key input after preferences deleted
+      this.props.setPref('0000'); // Resets preference form back to default
       this.props.showModal(false, "Success!", "All preferences deleted for this account..", "OK", this.props.closeModal);
     }
     else{

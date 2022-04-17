@@ -296,9 +296,9 @@ class KeyManagement extends Component{
         </Row>
         
         <Row className="test"> 
-        <Col><Button size="sm" variant="danger" onClick={this.deleteModal}>Delete These Preferences</Button></Col>
-        <Col><Button size="sm" variant="secondary" onClick={this.newKeyModal}>Get New Key</Button></Col>
-        <Col><Button size="sm" variant="primary" type="submit">
+        <Col><Button className="dangerButton" size="sm" variant="danger" onClick={this.deleteModal}>Delete These Preferences</Button></Col>
+        <Col><Button className="secondaryButton" size="sm" variant="secondary" onClick={this.newKeyModal}>Get New Key</Button></Col>
+        <Col><Button className="primaryButton" size="sm" variant="primary" type="submit">
           Retrieve
         </Button>
         </Col>
@@ -554,7 +554,7 @@ class ApprovedAddresses extends Component{
             <Form.Select as="select" className="select" size="lg"  id="approvedAddressSelect" value={this.state.selectedAddress} onChange={this.handleRemoveAddressChange}>
               {addressList}
               </Form.Select>
-              <Button size="lg" variant="danger" type="submit">
+              <Button className="dangerButton" size="lg" variant="danger" type="submit">
                     Remove this address
                 </Button>
           </label>
@@ -566,7 +566,7 @@ class ApprovedAddresses extends Component{
           <Form.Control className="select" type="text" size="lg" placeholder="Enter new address to approve" value={this.state.newAddress} onChange={this.handleNewAddressChange}></Form.Control>
         
       
-          <Button size="lg" variant="primary" type="submit" id="newAddressInput" name="newAddressInput">
+          <Button className="primaryButton" size="lg" variant="primary" type="submit" id="newAddressInput" name="newAddressInput">
                     Add new address
           </Button>
         </label>

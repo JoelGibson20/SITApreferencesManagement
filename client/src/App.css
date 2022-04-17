@@ -38,6 +38,7 @@
   max-width: 400px;
   margin-top: 15px;
   margin-bottom: 15px;
+  text-align: center;
 }
 
 .addAddressInput{
@@ -60,4 +61,17 @@
 
 .submitButton{
   margin-bottom: 40px;
+  box-shadow: 3px 4px rgb(124, 171, 243);
+}
+
+.primaryButton{
+  box-shadow: 3px 4px rgb(124, 171, 243);
+}
+
+.dangerButton{
+  box-shadow: 3px 4px rgb(233, 138, 148);
+}
+
+.secondaryButton{
+  box-shadow: 3px 4px rgb(166, 172, 177);
 }

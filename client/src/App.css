@@ -40,8 +40,11 @@
   background-color: rgb(105, 162, 255);
 }
 
-.removeAddressSelect{
-  width:fit-content;
+.select{
+  min-width: 400px;
+  max-width: 400px;
+  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .addAddressInput{
@@ -50,10 +53,18 @@
 
 
 .newAddressForm{
-  padding: 10%;
+  margin-top: 54px;
+
 }
 
 .dimensionInput{
   margin: 15px;
 }
 
+.approvedAddresses{
+  background-color: rgb(224, 224, 224);
+}
+
+.submitButton{
+  margin-bottom: 40px;
+}

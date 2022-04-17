@@ -119,7 +119,7 @@ class App extends Component {
         <br/>
         <Container classname="body">
           <Row>
-            <Col xs="8"> 
+            <Col xs="7"> 
            <PreferencesForm ref = {this.preferencesFormRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} showModal={this.showModal} closeModal={this.closeModal}/>
            </Col>
            <Col>
@@ -297,7 +297,7 @@ class KeyManagement extends Component{
         
         <Row className="test"> 
         <Col><Button size="sm" variant="danger" onClick={this.deleteModal}>Delete These Preferences</Button></Col>
-        <Col><Button size="sm" variant="primary" onClick={this.newKeyModal}>Get New Key</Button></Col>
+        <Col><Button size="sm" variant="secondary" onClick={this.newKeyModal}>Get New Key</Button></Col>
         <Col><Button size="sm" variant="primary" type="submit">
           Retrieve
         </Button>
@@ -376,10 +376,9 @@ class PreferencesForm extends Component{
             <h3>Define Your Preferences</h3>
               <Form onSubmit={this.onSubmit}>
                 <label>
-                  <br/>
                   Spatial:
                   </label>
-                  <Form.Select className="dimensionInput" as="select" id="spatial" value={this.state.spatial} onChange={this.handleChange}>
+                  <Form.Select size="lg" className="dimensionInput" as="select" id="spatial" value={this.state.spatial} onChange={this.handleChange}>
                     <option value="0">0. No Information</option>
                     <option value="1">1. Aggregation</option>
                     <option value="2">2. Obfuscation</option>
@@ -391,7 +390,7 @@ class PreferencesForm extends Component{
                 <label>
                   Identity:
                   </label>
-                  <Form.Select className="dimensionInput" as="select" id="identity" value={this.state.identity} onChange={this.handleChange}>
+                  <Form.Select size="lg" className="dimensionInput" as="select" id="identity" value={this.state.identity} onChange={this.handleChange}>
                     <option value="0">0. No Information</option>
                     <option value="1">1. Aggregation</option>
                     <option value="2">2. Obfuscation</option>
@@ -403,7 +402,7 @@ class PreferencesForm extends Component{
                 <label>
                   Temporal:
                 </label>
-                  <Form.Select className="dimensionInput" as="select" id="temporal" value={this.state.temporal} onChange={this.handleChange}>
+                  <Form.Select size="lg" className="dimensionInput" as="select" id="temporal" value={this.state.temporal} onChange={this.handleChange}>
                     <option value="0">0. No Information</option>
                     <option value="1">1. Aggregation</option>
                     <option value="2">2. Obfuscation</option>
@@ -415,7 +414,7 @@ class PreferencesForm extends Component{
                 <label>
                   Activity:
                 </label>
-                  <Form.Select className="dimensionInput" as="select" id="activity" value={this.state.activity} onChange={this.handleChange}>
+                  <Form.Select size="lg" className="dimensionInput" as="select" id="activity" value={this.state.activity} onChange={this.handleChange}>
                     <option value="0">0. No Information</option>
                     <option value="1">1. Aggregation</option>
                     <option value="2">2. Obfuscation</option>
@@ -423,7 +422,7 @@ class PreferencesForm extends Component{
                     <option value="4">4. Full Information</option>
                   </Form.Select>
 
-                <Button size="lg" variant="primary" type="submit">
+                <Button className="submitButton" size="lg" variant="primary" type="submit">
                     Submit
                 </Button>
               </Form>
@@ -547,15 +546,15 @@ class ApprovedAddresses extends Component{
     }, this);
 
     return(
-      <Container>
-        <h4>Approved Addresses</h4>
+      <Container className="approvedAddresses">
+        <h3>Approved Addresses</h3>
         <Form onSubmit={this.removeAddressModal}>
           <label>
             Approved Addresses:
-            <Form.Select as="select" className="removeAddressSelect" size="sm"  id="approvedAddressSelect" value={this.state.selectedAddress} onChange={this.handleRemoveAddressChange}>
+            <Form.Select as="select" className="select" size="lg"  id="approvedAddressSelect" value={this.state.selectedAddress} onChange={this.handleRemoveAddressChange}>
               {addressList}
               </Form.Select>
-              <Button size="sm" variant="danger" type="submit">
+              <Button size="lg" variant="danger" type="submit">
                     Remove this address
                 </Button>
           </label>
@@ -564,10 +563,10 @@ class ApprovedAddresses extends Component{
         <Form className="newAddressForm" onSubmit={this.addAddressModal}>
         <label>
           Add an Approved Address:
-          <Form.Control className="addAddressInput" type="text" size="sm" placeholder="Enter new address to approve" value={this.state.newAddress} onChange={this.handleNewAddressChange}></Form.Control>
+          <Form.Control className="select" type="text" size="lg" placeholder="Enter new address to approve" value={this.state.newAddress} onChange={this.handleNewAddressChange}></Form.Control>
         
       
-          <Button size="sm" variant="primary" type="submit" id="newAddressInput" name="newAddressInput">
+          <Button size="lg" variant="primary" type="submit" id="newAddressInput" name="newAddressInput">
                     Add new address
           </Button>
         </label>

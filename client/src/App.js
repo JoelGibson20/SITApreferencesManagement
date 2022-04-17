@@ -4,6 +4,7 @@ import SITAPreferencesContract from "./contracts/SITApreferences2.json";
 import {encryptPreferences, decryptPreferences, genKey, hashKey} from "./crypto-methods";
 import web3 from "web3";
 import {Container, Button, Navbar, Form, Row, Col, Modal} from 'react-bootstrap/';
+import { CDBFooter } from 'cdbreact/';
 
 import "./App.css";
 import "./bootstrap.min.css"
@@ -144,7 +145,8 @@ class App extends Component {
         </Modal.Footer>
       </Modal>
       
-      </Container>   
+      <CDBFooter className="shadow"></CDBFooter>
+      </Container>  
       </div>
     );
   }

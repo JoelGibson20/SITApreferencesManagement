@@ -161,7 +161,7 @@ class YourAccount extends Component{
 		return(
       <Container id="yourAccountContainer">
       <div id="yourAccountDiv">
-			  <p id="yourAccount"> <h3>Your Account:</h3> {address} </p>
+			  <p id="yourAccount"> <h4>Your Account:</h4> {address} </p>
       </div>
       </Container>	
 		);
@@ -376,51 +376,52 @@ class PreferencesForm extends Component{
             <h3>Define Your Preferences</h3>
               <Form onSubmit={this.onSubmit}>
                 <label>
+                  <br/>
                   Spatial:
                   </label>
-                  <Form.Control as="select" id="spatial" value={this.state.spatial} onChange={this.handleChange}>
+                  <Form.Select className="dimensionInput" as="select" id="spatial" value={this.state.spatial} onChange={this.handleChange}>
                     <option value="0">0. No Information</option>
                     <option value="1">1. Aggregation</option>
                     <option value="2">2. Obfuscation</option>
                     <option value="3">3. Regulation</option>
                     <option value="4">4. Full Information</option>
-                  </Form.Control>
+                  </Form.Select>
                 
                 
                 <label>
                   Identity:
                   </label>
-                  <Form.Control as="select" id="identity" value={this.state.identity} onChange={this.handleChange}>
+                  <Form.Select className="dimensionInput" as="select" id="identity" value={this.state.identity} onChange={this.handleChange}>
                     <option value="0">0. No Information</option>
                     <option value="1">1. Aggregation</option>
                     <option value="2">2. Obfuscation</option>
                     <option value="3">3. Regulation</option>
                     <option value="4">4. Full Information</option>
-                  </Form.Control>
+                  </Form.Select>
               
                 
                 <label>
                   Temporal:
                 </label>
-                  <Form.Control as="select" id="temporal" value={this.state.temporal} onChange={this.handleChange}>
+                  <Form.Select className="dimensionInput" as="select" id="temporal" value={this.state.temporal} onChange={this.handleChange}>
                     <option value="0">0. No Information</option>
                     <option value="1">1. Aggregation</option>
                     <option value="2">2. Obfuscation</option>
                     <option value="3">3. Regulation</option>
                     <option value="4">4. Full Information</option>
-                  </Form.Control>
+                  </Form.Select>
       
                 
                 <label>
                   Activity:
                 </label>
-                  <Form.Control as="select" id="activity" value={this.state.activity} onChange={this.handleChange}>
+                  <Form.Select className="dimensionInput" as="select" id="activity" value={this.state.activity} onChange={this.handleChange}>
                     <option value="0">0. No Information</option>
                     <option value="1">1. Aggregation</option>
                     <option value="2">2. Obfuscation</option>
                     <option value="3">3. Regulation</option>
                     <option value="4">4. Full Information</option>
-                  </Form.Control>
+                  </Form.Select>
 
                 <Button size="lg" variant="primary" type="submit">
                     Submit
@@ -551,9 +552,9 @@ class ApprovedAddresses extends Component{
         <Form onSubmit={this.removeAddressModal}>
           <label>
             Approved Addresses:
-            <Form.Control as="select" className="removeAddressSelect" size="sm"  id="approvedAddressSelect" value={this.state.selectedAddress} onChange={this.handleRemoveAddressChange}>
+            <Form.Select as="select" className="removeAddressSelect" size="sm"  id="approvedAddressSelect" value={this.state.selectedAddress} onChange={this.handleRemoveAddressChange}>
               {addressList}
-              </Form.Control>
+              </Form.Select>
               <Button size="sm" variant="danger" type="submit">
                     Remove this address
                 </Button>

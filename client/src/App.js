@@ -115,15 +115,15 @@ class App extends Component {
       return <div>Loading Web3, accounts, and contract. If you haven't already, please log in to your account using the MetaMask extension.</div>;
     }
     return (
-      <div className="App">
-        <Navbar className="navbar-colour" variant="light"  expand="lg">
+      <div className="app">
+        <Navbar className="navbar-top" variant="light"  expand="lg">
           <Container>
           <YourAccount address = {this.state.address}/>
           <KeyManagement ref={this.keyManagementRef} setKey = {this.setKey} getKey={this.getKey} setPref = {this.setPref} setApprovedAddresses = {this.setApprovedAddresses} address = {this.state.address} contract = {this.state.contract} showModal={this.showModal} closeModal={this.closeModal}/>
           </Container>
         </Navbar>
         <br/>
-        <Container classname="body">
+        <Container className="body">
           <Row>
             <Col xs="7"> 
            <PreferencesForm ref = {this.preferencesFormRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} showModal={this.showModal} closeModal={this.closeModal}/>
@@ -132,9 +132,9 @@ class App extends Component {
             <ApprovedAddresses ref = {this.approvedAddressesRef} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} showModal={this.showModal} closeModal={this.closeModal} />
           </Col>
           </Row>
+        </Container>
 
-        <DeleteAllPreferences setKey = {this.setKey} setPref = {this.setPref} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} showModal={this.showModal} closeModal={this.closeModal}/>
-
+        <Container className="modal">
         <Modal show={this.state.modalShow} backdrop="static" keyboard={false}>
         <Modal.Header>
           <Modal.Title>{this.state.modalTitle}</Modal.Title>
@@ -151,9 +151,16 @@ class App extends Component {
           </Button>
         </Modal.Footer>
       </Modal>
-      
       </Container>   
-      </div>
+      
+      <Navbar className="navbar-bottom" variant="light"  expand="lg">
+        <Container>
+          <DeleteAllPreferences setKey = {this.setKey} setPref = {this.setPref} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} showModal={this.showModal} closeModal={this.closeModal}/>
+        </Container>
+      </Navbar>
+
+    </div>
+      
     );
   }
 }
@@ -627,7 +634,7 @@ class DeleteAllPreferences extends Component{
   render(){
     return(
       <Container>
-        <Button className="dangerButton" size="lg" variant="danger" onClick={this.deleteAllModal}>
+        <Button className="dangerButton" size="sm" variant="danger" onClick={this.deleteAllModal}>
             Delete All Preferences
         </Button>
       </Container>

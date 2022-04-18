@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  width:100%;
 }
 
 #yourAccountDiv{
@@ -32,11 +33,15 @@
   box-shadow: 1px 2px rgb(210, 216, 228);
 }
 
-.navbar-colour{
+.navbar-top{
   background-color: rgb(191, 212, 245);
-  box-shadow: 1px 2px rgb(156, 178, 212);
+  border-bottom: 2px solid rgb(156, 178, 212);
 }
 
+.navbar-bottom{
+  background-color: rgb(191, 212, 245);
+  border-top: 2px solid rgb(156, 178, 212);
+}
 .select{
   min-width: 400px;
   max-width: 400px;
@@ -80,4 +85,10 @@
 
 .secondaryButton{
   box-shadow: 3px 4px rgb(166, 172, 177);
+}
+
+.footer{
+  background-color: rgb(191, 212, 245);
+  box-shadow: 1px 2px rgb(156, 178, 212);
+  width:auto;
 }

@@ -600,15 +600,24 @@ class DeleteAllPreferences extends Component{
 
   async onDeleteAllPreferences(){
     this.props.closeModal();
-    var success = await this.props.contract.methods.deleteAllPreferences().send({from: this.props.address});
-    if(success){
-      this.props.setKey(''); // Clears secret key input after preferences deleted
-      this.props.setPref('0000'); // Resets preference form back to default
-      this.props.showModal(false, "Success!", "All preferences deleted for this account..", "OK", this.props.closeModal);
+    try{
+      var success = await this.props.contract.methods.deleteAllPreferences().send({from: this.props.address});
+
+      if(success){
+        this.props.setKey(''); // Clears secret key input after preferences deleted
+        this.props.setPref('0000'); // Resets preference form back to default
+        this.props.showModal(false, "Success!", "All preferences deleted for this account..", "OK", this.props.closeModal);
+      }
+      else{
+        this.props.showModal(false, "Failure!", "Something went wrong.", "OK", this.props.closeModal);
+      }
     }
-    else{
-      this.props.showModal(false, "Failure!", "Something went wrong.", "OK", this.props.closeModal);
+    catch(e){
+      if(!(e.code === 4001)){ //Error code for user cancelling MetaMask tranasction
+        this.props.showModal(false, "Failure!", "No preferences found, nothing to delete.", "OK", this.props.closeModal);
+      }
     }
+
 
   }
 

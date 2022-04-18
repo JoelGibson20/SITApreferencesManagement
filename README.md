@@ -1,5 +1,5 @@
 # Storing and managing user privacy preferences using blockchain
-This repository contains my dissertation. It is a prototype DApp and smart contract which allow a user to store and manage privacy preferences stored on the blockchain.
+This repository contains my dissertation. It is prototype DApp and smart contract which allow a user to store and manage privacy preferences stored on the blockchain.
 
 ## What exactly does this mean?
 The user accesses the DApp (website) using an ordinary browser with the [**MetaMask**](https://metamask.io/) browser extension. Here they can define privacy preferences using the SITA dimensions described in the paper  [**The SITA principle for location privacy — Conceptual model and architecture**](https://www.researchgate.net/publication/286760053_The_SITA_principle_for_location_privacy_-_Conceptual_model_and_architecture). These preferences are stored AES encrypted on the blockchain, where the user, or others the user approves, can retrieve them.
@@ -18,15 +18,15 @@ This project requires [**Node Package Manager (NPM)**](https://www.npmjs.com/), 
 
 2. In the terminal navigate to `/client`. Then run the command :
 
-  `truffle migrate --reset`
+   `truffle migrate --reset`
 
-This will deploy the contract from the first address in **Ganache**.
+   This will deploy the contract from the   first address in **Ganache**.
 
 3. Next run the DApp by running the command:
 
-`npm run start`
+   `npm run start`
 
-This will start up the server and deploy the DApp to `localhost:3000`.
+   This will start up the server and deploy the DApp to `localhost:3000`.
 
 4. Click on the key icon next to an account in the Accounts list in **Ganache**, and copy the secret key. Open the MetaMask extension and select `import an account`. Paste the secret key and click import. Whilst on the DApp page, click `not connected` next to the account and it will connect to the DApp.
 
@@ -45,3 +45,4 @@ CSS styling can be found in:
 
 Methods used to encrypt, decrypt, hash, and generate keys can be found here:
 **`client/src/crypto-methods.js`**
+

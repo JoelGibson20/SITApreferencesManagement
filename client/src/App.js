@@ -13,9 +13,7 @@ class App extends Component {
     super(props);
     this.state = { storageValue: 0, web3: null, accounts: null, contract: null, address: '0x0', key: '', pref: '', modalShow: false, cancelNeeded: null, modalTitle: '', modalBody: '',modalOkMessage: '', modalOkFunction: null};
     this.setKey = this.setKey.bind(this);
-    this.outputKey = this.outputKey.bind(this);
     this.setPref = this.setPref.bind(this);
-    this.outputPref = this.outputPref.bind(this);
     this.getKey = this.getKey.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.showModal = this.showModal.bind(this);
@@ -41,7 +39,6 @@ class App extends Component {
 
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
-      console.log("networkId = ", networkId);
       const deployedNetwork = SITAPreferencesContract.networks[networkId];
       const instance = new web3.eth.Contract(
         SITAPreferencesContract.abi,
@@ -85,18 +82,11 @@ class App extends Component {
     return(this.state.key);
   }
 
-  outputKey(){ // Remove this, just a testing method to show the key was passed and set properly
-    console.log("state key: ",this.state.key);
-  }
-
   setPref(prefs){
-    this.setState({pref: prefs}, this.outputPref);
+    this.setState({pref: prefs});
     this.preferencesFormRef.current.updatePrefs(this.state.pref);
   }
 
-  outputPref(){
-    console.log("prefs: ", this.state.pref);
-  }
 
   setApprovedAddresses(newApprovedAddresses){
     this.approvedAddressesRef.current.updateApprovedAddresses(newApprovedAddresses);
@@ -180,7 +170,8 @@ class YourAccount extends Component{
 		return(
       <Container id="yourAccountContainer">
       <div id="yourAccountDiv">
-			  <p id="yourAccount"> <h4>Your Account:</h4> {address} </p>
+        <h4>Your Account:</h4>
+			  <p id="yourAccount">  {address} </p>
       </div>
       </Container>	
 		);
@@ -266,27 +257,24 @@ class KeyManagement extends Component{
       }
   }
 
-  keyError(){
+  keyError(){ // Checks inputted key for problems
     const keyInput = document.querySelector("[name=keyInput]");
     var re = /[0-9A-Fa-f]{64}/g; // Hexadecimal regex expression
 
-    if(this.state.key.length === 0){
-      console.log("key can't be empty")
+    if(this.state.key.length === 0){ // Key can't be blank
       keyInput.setCustomValidity("Key can't be blank");
       return(true);
     }
-    else if(this.state.key.length > 64 || this.state.key.length < 64 ){
-      console.log("key must be 64 characters long")
+    else if(this.state.key.length > 64 || this.state.key.length < 64 ){ // Key must be 64 characters long
       keyInput.setCustomValidity("Key must be 64 characters long");
       return(true);
     }
-    else if(!re.test(this.state.key)){
-      console.log("not hexadecimal");
+    else if(!re.test(this.state.key)){ // Key must be hexadecimal (checked using regex)
       keyInput.setCustomValidity("Key must be hexadecimal");
       return(true);
     }
-    else{
-      keyInput.setCustomValidity("");
+    else{ 
+      keyInput.setCustomValidity(""); // No problems, no warning displayed
       return(false);
     }
   }
@@ -352,8 +340,6 @@ class PreferencesForm extends Component{
   }
 
   handleChange(event){
-    console.log("target: ", event.target.id);
-    console.log("value:", event.target.value);
     if(event.target.id === "spatial"){
       this.setState({spatial: event.target.value});
     }
@@ -375,7 +361,6 @@ class PreferencesForm extends Component{
   async onSubmit(event){
     event.preventDefault();
     var prefs =  this.state.spatial + this.state.identity + this.state.temporal + this.state.activity; // Combines the dimensions into 1 string
-    console.log("prefs: ", prefs);
     var key = this.props.getKey();
     var re = /[0-9A-Fa-f]{64}/g; // Hexadecimal regex expression
 
@@ -387,7 +372,6 @@ class PreferencesForm extends Component{
     }
     else{
       var encPref = encryptPreferences(prefs,key);
-      console.log("encPref: ", encPref);
       var success = await this.props.contract.methods.setPreferences(encPref,hashKey(this.props.getKey())).send({from: this.props.address});
       if (success){
         this.props.showModal(false, "Success!", "Preferences stored under this key.", "OK", this.props.closeModal)
@@ -483,7 +467,6 @@ class ApprovedAddresses extends Component{
 
   handleRemoveAddressChange(event){
     event.preventDefault();
-    console.log("selected value: ",event.target.value);
     this.setState({selectedAddress: event.target.value});
   }
 
@@ -513,21 +496,18 @@ class ApprovedAddresses extends Component{
   newAddressError(){
     const newAddressInput = document.querySelector("[name=newAddressInput]");
 
-    if(!(web3.utils.isAddress(this.state.newAddress))){
-      console.log("Not an address"); 
+    if(!(web3.utils.isAddress(this.state.newAddress))){ // Input address must be a valid web3 address
       newAddressInput.setCustomValidity("Not an address");
       
     }
-    else if(this.state.newAddress === this.props.address){
-      console.log("Can't add your own address");
+    else if(this.state.newAddress === this.props.address){ // Input address can't be the user's address
       newAddressInput.setCustomValidity("Can't add your own address");
     }
-    else if(this.state.approvedAddresses.includes(this.state.newAddress)){
+    else if(this.state.approvedAddresses.includes(this.state.newAddress)){ // Input address can't be a duplicate of an already approved address
       newAddressInput.setCustomValidity("Address already approved");
     }
     else{
-      console.log("no problems")
-      newAddressInput.setCustomValidity("");
+      newAddressInput.setCustomValidity(""); // No warning for valid address
     }
 
   }
@@ -563,7 +543,7 @@ class ApprovedAddresses extends Component{
   render(){
     let addressList = this.state.approvedAddresses.length > 0 // If there is an approved address
     && this.state.approvedAddresses.map((address) => {
-      console.log("address: ", address); // Iterate through the approved addresses and map them to a select option for the drop-down
+     // Iterate through the approved addresses and map them to a select option for the drop-down
       return(
         <option key={address} value={address}>{address}</option>
       )
@@ -645,7 +625,5 @@ class DeleteAllPreferences extends Component{
     );
   }
 }
-
-
 
 export default App;

@@ -9,10 +9,6 @@
 
 #yourAccountDiv{
   float:left;
-  padding: 5px;  
-}
-
-#yourAccount{
   text-align: center;
   padding: 8px;
   background-color: rgb(172, 196, 235);
@@ -20,6 +16,7 @@
   border-radius: 8px;
   box-shadow: 2px 4px rgb(156, 178, 212);
 }
+
 
 #keyManagementDiv{
   float:right;

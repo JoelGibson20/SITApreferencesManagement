@@ -71,7 +71,7 @@ class App extends Component {
 
   setKey(newKey){
     this.setState({key: newKey});
-    if(newKey == ''){ // When delete all preferences completes it will reset the secret key box like so
+    if(newKey === ''){ // When delete all preferences completes it will reset the secret key box like so
       this.keyManagementRef.current.setNewKey();
     }
     
@@ -131,7 +131,7 @@ class App extends Component {
         </Modal.Header>
         <Modal.Body>{this.state.modalBody}</Modal.Body>
         <Modal.Footer>
-          {this.state.cancelNeeded == true &&
+          {this.state.cancelNeeded === true &&
            <Button variant="secondary" onClick={this.closeModal}>
             Cancel
          </Button>
@@ -146,7 +146,7 @@ class App extends Component {
       <Navbar className="navbar-bottom" variant="light"  expand="lg">
         <Container>
           <Col><p>Produced by Joel Gibson</p></Col>
-          <Col><a href="https://github.com/JoelGibson20/react" target="_blank">GitHub Link</a></Col>
+          <Col><a href="https://github.com/JoelGibson20/react" target="_blank" rel="noopener noreferrer">GitHub Link</a></Col>
           <Col>
           <DeleteAllPreferences setKey = {this.setKey} setPref = {this.setPref} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} showModal={this.showModal} closeModal={this.closeModal}/>
           </Col>

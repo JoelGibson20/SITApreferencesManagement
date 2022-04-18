@@ -24,15 +24,15 @@ error ApprovedAddressNotFound(address approvedAddress,address userAddress, strin
 /// @param hashKey Hashed key used.
 error CantRemoveOwnAddress(address userAddress, string hashKey);
 
-/// This address already exists approvedAddresses for this address + H(key) combination.
+/// This address already exists in approvedAddresses for this address + H(key) combination.
 /// @param approvedAddress Approved Address used.
 /// @param userAddress Address used.
 /// @param hashKey Hashed key used.
 error ApprovedAddressAlreadyExists(address approvedAddress,address userAddress, string hashKey);
  
 contract SITApreferences2{
-    mapping(bytes => string) private userpreferences; // Mapping bytes (address + key) to string of encrypted preferences
-    // Need to use bytes to be able to concatenate the address and key, should change later to a particular size bytes when we know address and key combined size
+    mapping(bytes => string) private userpreferences; // Mapping bytes (address + H(key)) to string of encrypted preferences
+    // Need to use bytes to be able to concatenate the address and H(key)
 
     mapping(address => string[]) private usedKeys; // Mapping user's address to string array of the H(key)s in use for a user
 

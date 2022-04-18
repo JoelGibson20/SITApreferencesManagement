@@ -203,7 +203,11 @@ contract SITApreferences2{
       // For use in case a user wants to delete a preference set but has forgotten the key
 
       string[] memory keysInUse = usedKeys[msg.sender]; // Gets all the keys the user has
-  
+
+      if(keysInUse.length == 0){ // Returns false if there are no preferences to delete
+        revert KeyNotInUse(msg.sender, "any");
+      }
+
       for(uint i; i < keysInUse.length; i++){ // Iterates through all the keys the user has
         deletePreferences(keysInUse[i]); // Deletes the preference set under this key
       }

@@ -3,6 +3,10 @@
   width:100%;
 }
 
+.body{
+  text-align: center;
+}
+
 #yourAccountDiv{
   float:left;
   padding: 5px;  
@@ -79,6 +83,7 @@
 
 .primaryButton{
   box-shadow: 3px 4px rgb(124, 171, 243);
+  margin-bottom: 20px;
 }
 
 .dangerButton{

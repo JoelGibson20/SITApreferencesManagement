@@ -26,7 +26,7 @@
   text-align: center;
 }
 
-.test{
+.keyManagementButtons{
   padding:10px;
 }
 
@@ -54,11 +54,6 @@
   box-shadow: 1px 2px rgb(210, 216, 228);
 }
 
-.addAddressInput{
-  width:fit-content;
-}
-
-
 .newAddressForm{
   margin-top: 54px;
 
@@ -67,10 +62,6 @@
 .dimensionInput{
   margin: 15px;
   box-shadow: 1px 2px rgb(210, 216, 228);
-}
-
-.approvedAddresses{
- 
 }
 
 .submitButton{
@@ -90,11 +81,3 @@
 .secondaryButton{
   box-shadow: 3px 4px rgb(166, 172, 177);
 }
-
-.footer{
-  background-color: rgb(191, 212, 245);
-  box-shadow: 1px 2px rgb(156, 178, 212);
-  width:auto;
-}
-
-

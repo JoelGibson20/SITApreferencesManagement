@@ -308,7 +308,7 @@ class KeyManagement extends Component{
           </Col>
         </Row>
         
-        <Row className="test"> 
+        <Row className="keyManagementButtons"> 
         <Col><Button className="dangerButton" size="sm" variant="danger" onClick={this.deleteModal}>Delete These Preferences</Button></Col>
         <Col><Button className="secondaryButton" size="sm" variant="secondary" onClick={this.newKeyModal}>Get New Key</Button></Col>
         <Col><Button className="primaryButton" size="sm" variant="primary" type="submit">
@@ -551,7 +551,7 @@ class ApprovedAddresses extends Component{
     }, this);
 
     return(
-      <Container className="approvedAddresses">
+      <Container>
         <h3>Approved Addresses</h3>
         <Form onSubmit={this.removeAddressModal}>
           <label>

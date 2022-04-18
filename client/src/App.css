@@ -41,7 +41,9 @@
 .navbar-bottom{
   background-color: rgb(191, 212, 245);
   border-top: 2px solid rgb(156, 178, 212);
+  text-align: center;
 }
+
 .select{
   min-width: 400px;
   max-width: 400px;

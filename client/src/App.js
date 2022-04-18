@@ -155,7 +155,11 @@ class App extends Component {
       
       <Navbar className="navbar-bottom" variant="light"  expand="lg">
         <Container>
+          <Col><p>Produced by Joel Gibson</p></Col>
+          <Col><a href="https://github.com/JoelGibson20/react" target="_blank">GitHub Link</a></Col>
+          <Col>
           <DeleteAllPreferences setKey = {this.setKey} setPref = {this.setPref} address = {this.state.address} contract = {this.state.contract} getKey = {this.getKey} showModal={this.showModal} closeModal={this.closeModal}/>
+          </Col>
         </Container>
       </Navbar>
 

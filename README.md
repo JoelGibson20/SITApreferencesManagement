@@ -15,19 +15,20 @@ The DApp is written in [**JavaScript**](https://www.javascript.com/) using [**Re
 This project requires [**Node Package Manager (NPM)**](https://www.npmjs.com/), and the [**Truffle Suite**](https://trufflesuite.com/).
 
 1. Using **Ganache**, quick-start an Ethereum blockchain.
-
+---
 2. In the terminal navigate to `/client`. Then run the command :
 
    `truffle migrate --reset`
 
    This will deploy the contract from the   first address in **Ganache**.
 
+---
 3. Next run the DApp by running the command:
 
    `npm run start`
 
    This will start up the server and deploy the DApp to `localhost:3000`.
-
+---
 4. Click on the key icon next to an account in the Accounts list in **Ganache**, and copy the secret key. Open the MetaMask extension and select `import an account`. Paste the secret key and click import. Whilst on the DApp page, click `not connected` next to the account and it will connect to the DApp.
 
 *You can now use the DApp*.

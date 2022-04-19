@@ -486,7 +486,7 @@ class ApprovedAddresses extends Component{
   
     catch(e){
       if(!(e.code === 4001)){ //Error code for user cancelling MetaMask tranasction
-        this.props.showModal(false, "Failure!", "No preferences found for this key, nothing to delete.", "OK", this.props.closeModal);
+        this.props.showModal(false, "Failure!", "No preferences found for this key. Please set some preferences before adding approved addresses.", "OK", this.props.closeModal);
       }
     }
     

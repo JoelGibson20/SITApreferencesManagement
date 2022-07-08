@@ -35,6 +35,7 @@ export function decryptPreferences(encPref, secretKey){
 }
 
 export function hashKey(secretKey){
+    console.log("hashed key: ", sha3_512(secretKey));
     return(sha3_512(secretKey)); // Returns the SHA3-512 hash of the key as a string
 }
 

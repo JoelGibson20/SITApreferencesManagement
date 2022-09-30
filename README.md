@@ -1,5 +1,5 @@
 # Storing and managing user privacy preferences using blockchain
-This repository contains my dissertation project. It is prototype DApp and smart contract which allow a user to store and manage privacy preferences stored on the blockchain. The paper can be read [here](https://github.com/JoelGibson20/SITApreferencesManagement/blob/main/Dissertation%20Paper.pdf).
+This repository contains my dissertation project. It is a prototype DApp and smart contract which allow a user to store and manage privacy preferences stored on the blockchain. The paper can be read [here](https://github.com/JoelGibson20/SITApreferencesManagement/blob/main/Dissertation%20Paper.pdf).
 
 ## What exactly does this mean?
 The user accesses the DApp (website) using an ordinary browser with the [**MetaMask**](https://metamask.io/) browser extension. Here they can define privacy preferences using the SITA dimensions described in the paper  [**The SITA principle for location privacy — Conceptual model and architecture**](https://www.researchgate.net/publication/286760053_The_SITA_principle_for_location_privacy_-_Conceptual_model_and_architecture). These preferences are stored AES encrypted on the blockchain, where the user, or others the user approves, can retrieve them.
